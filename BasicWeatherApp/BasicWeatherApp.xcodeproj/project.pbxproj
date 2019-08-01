@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		93CAC56522F2C62E00A4EBE4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CAC56422F2C62E00A4EBE4 /* AppDelegate.swift */; };
-		93CAC56722F2C62E00A4EBE4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CAC56622F2C62E00A4EBE4 /* ViewController.swift */; };
+		93CAC56722F2C62E00A4EBE4 /* CitySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CAC56622F2C62E00A4EBE4 /* CitySearchViewController.swift */; };
 		93CAC56A22F2C62E00A4EBE4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 93CAC56822F2C62E00A4EBE4 /* Main.storyboard */; };
 		93CAC56C22F2C62E00A4EBE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93CAC56B22F2C62E00A4EBE4 /* Assets.xcassets */; };
 		93CAC56F22F2C62E00A4EBE4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 93CAC56D22F2C62E00A4EBE4 /* LaunchScreen.storyboard */; };
@@ -29,7 +29,7 @@
 /* Begin PBXFileReference section */
 		93CAC56122F2C62E00A4EBE4 /* BasicWeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BasicWeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93CAC56422F2C62E00A4EBE4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		93CAC56622F2C62E00A4EBE4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		93CAC56622F2C62E00A4EBE4 /* CitySearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitySearchViewController.swift; sourceTree = "<group>"; };
 		93CAC56922F2C62E00A4EBE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		93CAC56B22F2C62E00A4EBE4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		93CAC56E22F2C62E00A4EBE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -80,7 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				93CAC56422F2C62E00A4EBE4 /* AppDelegate.swift */,
-				93CAC56622F2C62E00A4EBE4 /* ViewController.swift */,
+				93CAC56622F2C62E00A4EBE4 /* CitySearchViewController.swift */,
 				93CAC56822F2C62E00A4EBE4 /* Main.storyboard */,
 				93CAC58422F2C91D00A4EBE4 /* CitySearchTableViewCell.swift */,
 				93CAC56B22F2C62E00A4EBE4 /* Assets.xcassets */,
@@ -200,7 +200,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93CAC56722F2C62E00A4EBE4 /* ViewController.swift in Sources */,
+				93CAC56722F2C62E00A4EBE4 /* CitySearchViewController.swift in Sources */,
 				93CAC56522F2C62E00A4EBE4 /* AppDelegate.swift in Sources */,
 				93CAC58522F2C91D00A4EBE4 /* CitySearchTableViewCell.swift in Sources */,
 			);
