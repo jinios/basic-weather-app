@@ -11,7 +11,7 @@ import Foundation
 // class DataSetter<T: LocationItemProtocol, U: RequestForecastType,
 class DataSetter<T: LocationItem> {
     
-    class func fetch(of city: T) {
+    class func fetch(of city: T, handler: @escaping((LocationItem, CurrentWeather) -> Void)) {
         guard let lat = city.latitude else { return }
         guard let lng = city.longitude else { return }
         guard let baseUrl = KeyInfoLoader.loadValue(of: .WeatherBaseURL) else { return }
@@ -38,7 +38,11 @@ class DataSetter<T: LocationItem> {
             if let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode, let data = data {
                 do {
                     print(data.prettyPrintedJSONString!)
-                } catch { }
+                    let currentWeather = try JSONDecoder().decode(CurrentWeather.self, from: data)
+                    handler(city, currentWeather)
+                } catch {
+                    print("FAIL TO DECODE")
+                }
             }
             }.resume()
     }
