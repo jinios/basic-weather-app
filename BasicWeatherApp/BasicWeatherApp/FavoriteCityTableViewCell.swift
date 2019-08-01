@@ -10,15 +10,31 @@ import UIKit
 
 class FavoriteCityTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var cityName: UILabel!
+    @IBOutlet weak var currentTemperature: UILabel!
+    
+    var location: LocationItem? {
+        didSet {
+            guard let location = self.location else { return }
+            self.cityName.text = location.name
+        }
+    }
+    
+    var cityData: FavoriteCity? {
+        didSet {
+            guard let cityData = self.cityData else { return }
+            self.cityName.text = cityData.location?.name
+            self.currentTemperature.text = String(cityData.currentWeather?.detailWeather.temperature ?? 100)
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
 }

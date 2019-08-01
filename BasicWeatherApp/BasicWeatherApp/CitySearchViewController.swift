@@ -15,6 +15,7 @@ class CitySearchViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     var locationSearchCompleter: MKLocalSearchCompleter?
+    weak var favoriteCityListManager: FavoriteCityDelegate?
     
     var resultCities: [MKLocalSearchCompletion]? {
         didSet {
@@ -39,6 +40,16 @@ class CitySearchViewController: UIViewController {
     private func searchBarIsEmpty() -> Bool {
         return searchBar.text?.isEmpty ?? true
     }
+    
+    private func dismiss() {
+        guard let presentingVC = self.presentingViewController as? FavoriteListViewController else { return }
+        presentingVC.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func closeCitySearch(_ sender: Any) {
+        dismiss()
+    }
+    
     
 }
 
@@ -115,9 +126,16 @@ extension CitySearchViewController: UITableViewDelegate {
             let lng = mapItem.placemark.coordinate.longitude
             
             let locationItem = LocationItem(latitude: lat, longitude: lng, name: name, sub: nil)
-            DataSetter.fetch(of: locationItem)
+            DataSetter.fetch(of: locationItem, handler: self.addFavoriteCity(location:currentWeather:) )
         }
         
+    }
+    
+    func addFavoriteCity(location: LocationItem, currentWeather: CurrentWeather) {
+        DispatchQueue.main.async {
+            self.favoriteCityListManager?.addCity(locationitem: location, currentWeather: currentWeather)
+            self.dismiss()
+        }
     }
 }
 
