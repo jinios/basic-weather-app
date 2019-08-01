@@ -13,6 +13,7 @@
 		93CAC56C22F2C62E00A4EBE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93CAC56B22F2C62E00A4EBE4 /* Assets.xcassets */; };
 		93CAC56F22F2C62E00A4EBE4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 93CAC56D22F2C62E00A4EBE4 /* LaunchScreen.storyboard */; };
 		93CAC57A22F2C62E00A4EBE4 /* BasicWeatherAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CAC57922F2C62E00A4EBE4 /* BasicWeatherAppTests.swift */; };
+		93CAC58522F2C91D00A4EBE4 /* CitySearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CAC58422F2C91D00A4EBE4 /* CitySearchTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		93CAC57522F2C62E00A4EBE4 /* BasicWeatherAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BasicWeatherAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		93CAC57922F2C62E00A4EBE4 /* BasicWeatherAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicWeatherAppTests.swift; sourceTree = "<group>"; };
 		93CAC57B22F2C62E00A4EBE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		93CAC58422F2C91D00A4EBE4 /* CitySearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitySearchTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 				93CAC56422F2C62E00A4EBE4 /* AppDelegate.swift */,
 				93CAC56622F2C62E00A4EBE4 /* ViewController.swift */,
 				93CAC56822F2C62E00A4EBE4 /* Main.storyboard */,
+				93CAC58422F2C91D00A4EBE4 /* CitySearchTableViewCell.swift */,
 				93CAC56B22F2C62E00A4EBE4 /* Assets.xcassets */,
 				93CAC56D22F2C62E00A4EBE4 /* LaunchScreen.storyboard */,
 				93CAC57022F2C62E00A4EBE4 /* Info.plist */,
@@ -199,6 +202,7 @@
 			files = (
 				93CAC56722F2C62E00A4EBE4 /* ViewController.swift in Sources */,
 				93CAC56522F2C62E00A4EBE4 /* AppDelegate.swift in Sources */,
+				93CAC58522F2C91D00A4EBE4 /* CitySearchTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
