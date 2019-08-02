@@ -28,6 +28,14 @@ class FavoriteCityTableViewCell: UITableViewCell {
         }
     }
     
+    var weather: CurrentWeather? {
+        didSet {
+            guard let weather = self.weather else { return }
+            self.cityName.text = weather.cityName
+            self.currentTemperature.text = String(Int(weather.detailWeather.temperature.rounded()) ?? 100)
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         

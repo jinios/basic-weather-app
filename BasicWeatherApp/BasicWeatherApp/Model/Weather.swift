@@ -244,6 +244,10 @@ struct System: Codable {
 
 struct CurrentWeather: Codable {
     
+    static func == (lhs: CurrentWeather, rhs: CurrentWeather) -> Bool {
+        return lhs.cityID == rhs.cityID
+    }
+    
     private(set) var geoPoint: GeoPoint
     private(set) var weather: [Weather]
     private(set) var detailWeather: DetailWeather
@@ -251,12 +255,12 @@ struct CurrentWeather: Codable {
     private(set) var clouds: Clouds?
     private(set) var rain: Rain?
     private(set) var snow: Snow?
-    private(set) var cityName: String
-    private(set) var cityIdentifier: Int?
-    private var timeOfLastupdate: TimeInterval
-    private(set) var system: System
+    private(set) var cityName: String?
+    private(set) var cityID: Int?
+    private var timeOfLastupdate: TimeInterval?
+    private(set) var system: System?
    
-    private var cod: Int
+    private var cod: Int?
     
     private enum CodingKeys: String, CodingKey {
         case geoPoint = "coord"
@@ -275,7 +279,7 @@ struct CurrentWeather: Codable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        cod = try container.decode(Int.self, forKey: .cod)
+        cod = try? container.decode(Int.self, forKey: .cod)
         geoPoint = try container.decode(GeoPoint.self, forKey: .geoPoint)
         
         weather = try container.decode([Weather].self, forKey: .weather)
@@ -284,14 +288,15 @@ struct CurrentWeather: Codable {
         clouds = try? container.decode(Clouds.self, forKey: .clouds)
         rain = try? container.decode(Rain.self, forKey: .rain)
         snow = try? container.decode(Snow.self, forKey: .snow)
-        cityName = try container.decode(String.self, forKey: .cityName)
-        cityIdentifier = try? container.decode(Int.self, forKey: .cityIdentifier)
-        timeOfLastupdate = try container.decode(TimeInterval.self, forKey: .timeOfLastupdate)
-        system = try container.decode(System.self, forKey: .system)
+        cityName = try? container.decode(String.self, forKey: .cityName)
+        cityID = try? container.decode(Int.self, forKey: .cityIdentifier)
+        timeOfLastupdate = try? container.decode(TimeInterval.self, forKey: .timeOfLastupdate)
+        system = try? container.decode(System.self, forKey: .system)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        
         try container.encode(geoPoint, forKey: .geoPoint)
         try container.encode(weather, forKey: .weather)
         try container.encode(detailWeather, forKey: .detailWeather)
@@ -299,13 +304,38 @@ struct CurrentWeather: Codable {
         try? container.encode(clouds, forKey: .clouds)
         try? container.encode(rain, forKey: .rain)
         try? container.encode(snow, forKey: .snow)
-        try container.encode(cityName, forKey: .cityName)
-        try? container.encode(cityIdentifier, forKey: .cityIdentifier)
-        try container.encode(timeOfLastupdate, forKey: .timeOfLastupdate)
-        try container.encode(system, forKey: .system)
-        try container.encode(cod, forKey: .cod)
+        try? container.encode(cityName, forKey: .cityName)
+        try? container.encode(cityID, forKey: .cityIdentifier)
+        try? container.encode(timeOfLastupdate, forKey: .timeOfLastupdate)
+        try? container.encode(system, forKey: .system)
+        try? container.encode(cod, forKey: .cod)
     }
     
     
+    
+}
+
+struct GroupCurrentWeather: Codable {
+    private(set) var count: Int
+    private(set) var list: [CurrentWeather]
+    
+    private enum CodingKeys: String, CodingKey {
+        case count = "cnt"
+        case list
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        count = try container.decode(Int.self, forKey: .count)
+        list = try container.decode([CurrentWeather].self, forKey: .list)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(count, forKey: .count)
+        try container.encode(list, forKey: .list)
+    }
     
 }

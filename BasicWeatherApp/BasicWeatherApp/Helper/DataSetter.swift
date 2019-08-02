@@ -46,4 +46,40 @@ class DataSetter<T: LocationItem> {
             }
             }.resume()
     }
+    
+    class func fetch(of cityId: String, handler: @escaping(([CurrentWeather]) -> Void)) {
+        guard let baseUrl = KeyInfoLoader.loadValue(of: .WeatherBaseURL) else { return }
+        guard let appId = KeyInfoLoader.loadValue(of: .APIKey) else { return }
+        
+        var base = URL(string: baseUrl)
+        base?.appendPathComponent("group")
+        
+        var urlComponents = URLComponents(url: base!, resolvingAgainstBaseURL: true)
+        
+        urlComponents?.queryItems = [
+            URLQueryItem(name: QueryItemKey.cityId.rawValue, value: cityId),
+            URLQueryItem(name: QueryItemKey.units.rawValue, value: "metric"),
+            URLQueryItem(name: QueryItemKey.appid.rawValue, value: appId)
+        ]
+        
+        guard let sessionUrl = urlComponents?.url else { return }
+        let configure = URLSessionConfiguration.default
+        configure.timeoutIntervalForRequest = 15
+        let urlSession = URLSession(configuration: configure)
+        
+        urlSession.dataTask(with: sessionUrl) {(data, response, err) in
+            if let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode, let data = data {
+                do {
+                    print(data.prettyPrintedJSONString!)
+                    let currentWeather = try JSONDecoder().decode(GroupCurrentWeather.self, from: data).list
+                    let temp = LocationItem(latitude: 0, longitude: 0, name: "", sub: "")
+                    handler(currentWeather)
+                } catch {
+                    print("FAIL TO DECODE")
+                }
+            }
+            }.resume()
+    
+    }
 }
+

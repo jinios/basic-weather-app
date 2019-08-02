@@ -11,6 +11,7 @@ import Foundation
 enum QueryItemKey: String {
     case latitude = "lat"
     case longitude = "lon"
+    case cityId = "id"
     case appid
     case units
 }
