@@ -24,6 +24,13 @@
 		93CAC58E22F2CB8A00A4EBE4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CAC58922F2CB8A00A4EBE4 /* Extensions.swift */; };
 		93CAC58F22F2CB8A00A4EBE4 /* KeyInfoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CAC58A22F2CB8A00A4EBE4 /* KeyInfoLoader.swift */; };
 		FD1EF33322F47BD500EFAFA2 /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1EF33222F47BD500EFAFA2 /* DataStorage.swift */; };
+		FD7DB0C322F4AF0800A2127B /* DetailWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB0C222F4AF0800A2127B /* DetailWeatherViewController.swift */; };
+		FD7EC0D522F4C3CE00162F51 /* HourlyWeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7EC0D422F4C3CE00162F51 /* HourlyWeatherTableViewCell.swift */; };
+		FD7EC0D722F4C47900162F51 /* WeeklyWeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7EC0D622F4C47900162F51 /* WeeklyWeatherTableViewCell.swift */; };
+		FD7EC0D922F4C4FB00162F51 /* CurrentDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7EC0D822F4C4FB00162F51 /* CurrentDetailTableViewCell.swift */; };
+		FD7EC0DB22F4C61900162F51 /* HourlyWeatherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7EC0DA22F4C61900162F51 /* HourlyWeatherCollectionViewCell.swift */; };
+		FD7EC0DD22F4C62800162F51 /* WeeklyWeatherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7EC0DC22F4C62800162F51 /* WeeklyWeatherCollectionViewCell.swift */; };
+		FD7EC0DF22F4C63500162F51 /* CurrentDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7EC0DE22F4C63500162F51 /* CurrentDetailCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +65,13 @@
 		93CAC58922F2CB8A00A4EBE4 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		93CAC58A22F2CB8A00A4EBE4 /* KeyInfoLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyInfoLoader.swift; sourceTree = "<group>"; };
 		FD1EF33222F47BD500EFAFA2 /* DataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorage.swift; sourceTree = "<group>"; };
+		FD7DB0C222F4AF0800A2127B /* DetailWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailWeatherViewController.swift; sourceTree = "<group>"; };
+		FD7EC0D422F4C3CE00162F51 /* HourlyWeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherTableViewCell.swift; sourceTree = "<group>"; };
+		FD7EC0D622F4C47900162F51 /* WeeklyWeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyWeatherTableViewCell.swift; sourceTree = "<group>"; };
+		FD7EC0D822F4C4FB00162F51 /* CurrentDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDetailTableViewCell.swift; sourceTree = "<group>"; };
+		FD7EC0DA22F4C61900162F51 /* HourlyWeatherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherCollectionViewCell.swift; sourceTree = "<group>"; };
+		FD7EC0DC22F4C62800162F51 /* WeeklyWeatherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyWeatherCollectionViewCell.swift; sourceTree = "<group>"; };
+		FD7EC0DE22F4C63500162F51 /* CurrentDetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDetailCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +97,7 @@
 			children = (
 				93BD120522F2F40E009BD4E6 /* FavoriteListViewController.swift */,
 				93CAC56622F2C62E00A4EBE4 /* CitySearchViewController.swift */,
+				FD7DB0C222F4AF0800A2127B /* DetailWeatherViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -92,6 +107,12 @@
 			children = (
 				93CAC58422F2C91D00A4EBE4 /* CitySearchTableViewCell.swift */,
 				93BD120322F2F3CB009BD4E6 /* FavoriteCityTableViewCell.swift */,
+				FD7EC0D422F4C3CE00162F51 /* HourlyWeatherTableViewCell.swift */,
+				FD7EC0D622F4C47900162F51 /* WeeklyWeatherTableViewCell.swift */,
+				FD7EC0D822F4C4FB00162F51 /* CurrentDetailTableViewCell.swift */,
+				FD7EC0DA22F4C61900162F51 /* HourlyWeatherCollectionViewCell.swift */,
+				FD7EC0DC22F4C62800162F51 /* WeeklyWeatherCollectionViewCell.swift */,
+				FD7EC0DE22F4C63500162F51 /* CurrentDetailCollectionViewCell.swift */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -263,15 +284,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD7EC0DB22F4C61900162F51 /* HourlyWeatherCollectionViewCell.swift in Sources */,
 				93CAC56722F2C62E00A4EBE4 /* CitySearchViewController.swift in Sources */,
 				93CAC58E22F2CB8A00A4EBE4 /* Extensions.swift in Sources */,
 				93BD120622F2F40E009BD4E6 /* FavoriteListViewController.swift in Sources */,
 				FD1EF33322F47BD500EFAFA2 /* DataStorage.swift in Sources */,
+				FD7EC0D722F4C47900162F51 /* WeeklyWeatherTableViewCell.swift in Sources */,
+				FD7EC0DD22F4C62800162F51 /* WeeklyWeatherCollectionViewCell.swift in Sources */,
+				FD7EC0DF22F4C63500162F51 /* CurrentDetailCollectionViewCell.swift in Sources */,
 				93CAC58C22F2CB8A00A4EBE4 /* DataSetter.swift in Sources */,
 				93BD120822F30BC7009BD4E6 /* Weather.swift in Sources */,
+				FD7EC0D522F4C3CE00162F51 /* HourlyWeatherTableViewCell.swift in Sources */,
+				FD7EC0D922F4C4FB00162F51 /* CurrentDetailTableViewCell.swift in Sources */,
 				93CAC58B22F2CB8A00A4EBE4 /* LocationItem.swift in Sources */,
 				936006EE22F3BFF400F21315 /* FavoriteList.swift in Sources */,
 				93CAC56522F2C62E00A4EBE4 /* AppDelegate.swift in Sources */,
+				FD7DB0C322F4AF0800A2127B /* DetailWeatherViewController.swift in Sources */,
 				93CAC58522F2C91D00A4EBE4 /* CitySearchTableViewCell.swift in Sources */,
 				93BD120422F2F3CB009BD4E6 /* FavoriteCityTableViewCell.swift in Sources */,
 				93CAC58F22F2CB8A00A4EBE4 /* KeyInfoLoader.swift in Sources */,
