@@ -8,100 +8,78 @@
 
 import UIKit
 
-class FavoriteCity {
-
-    var location: LocationItem?
-    var currentWeather: CurrentWeather?
-
-    init(location: LocationItem, currentWeather: CurrentWeather?) {
-        self.location = location
-        self.currentWeather = currentWeather
-    }
-    
-    static func == (lhs: FavoriteCity, rhs: FavoriteCity) -> Bool {
-        return lhs.currentWeather?.cityID == rhs.currentWeather?.cityID
-    }
-    
-}
-
 protocol FavoriteCityDelegate: class {
-    func addCity(locationitem: LocationItem, currentWeather: CurrentWeather)
+    func addCity(_ city: FavoriteCity)
 }
 
 class FavoriteListViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
    
-    var cities: [FavoriteCity]? {
-        didSet {
-            guard self.cities != nil else { return }
-            self.tableView.reloadData()
-        }
-    }
-    
-    var cityIds: [Int] = [] {
-        didSet {
-            guard self.cityIds.count > 0 else { return }
-            currentWeatherData()
-        }
-    }
-    
-    var weathers: [CurrentWeather] = [] {
+    var cities: [FavoriteCity] = [] {
         didSet {
             DispatchQueue.main.async {
-                guard self.weathers.count > 0 else { return }
                 self.tableView.reloadData()
             }
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 100
+        self.navigationItem.title = "즐겨찾는 도시"
     }
     
     @IBAction func openSearchCity(_ sender: Any) {
         guard let nextVC = self.storyboard?.instantiateViewController(withIdentifier: "CitySearchViewController") as? CitySearchViewController else { return }
         nextVC.favoriteCityListManager = self
+
         self.present(nextVC, animated: true, completion: nil)
-    }
-    
-    func currentWeatherData() {
-        let idstr = cityIds.map{String($0)}.joined(separator: ",")
-        DataSetter.fetch(of: idstr, handler: reloadData(c:))
-    }
-    
-    func reloadData(c: [CurrentWeather]) {
-        guard self.cityIds.count == c.count else { return }
-        self.weathers = c
     }
 
 }
 
 extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return weathers.count
+        return cities.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteCityTableViewCell", for: indexPath) as? FavoriteCityTableViewCell else { return UITableViewCell() }
-        cell.weather = weathers[indexPath.row]
-        
+        cell.cityData = self.cities[indexPath.row]
+
         return cell
     }
-    
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+    }
     
 }
 
 extension FavoriteListViewController: FavoriteCityDelegate {
     
-    func addCity(locationitem locationItem: LocationItem, currentWeather: CurrentWeather) {
-        if cities == nil {
-            cities = [FavoriteCity]()
-        }
-        
-        guard FavoriteList.shared.push(id: currentWeather.cityID ?? 0) else { return }
-        self.cityIds = FavoriteList.shared.ids()
+    func addCity(_ city: FavoriteCity) {
+        self.cities.append(city)
     }
 
+}
+
+struct FavoriteCity: Hashable {
+
+    var location: LocationItem?
+    var currentWeather: CurrentWeather?
+
+    func hash(into hasher: inout Hasher) {
+        return hasher.combine(currentWeather?.cityID ?? 0)
+    }
+
+    init(location: LocationItem, currentWeather: CurrentWeather?) {
+        self.location = location
+        self.currentWeather = currentWeather
+    }
+
+    static func == (lhs: FavoriteCity, rhs: FavoriteCity) -> Bool {
+        return lhs.currentWeather?.cityID == rhs.currentWeather?.cityID
+    }
 }

@@ -12,30 +12,16 @@ class FavoriteCityTableViewCell: UITableViewCell {
 
     @IBOutlet weak var cityName: UILabel!
     @IBOutlet weak var currentTemperature: UILabel!
-    
-    var location: LocationItem? {
-        didSet {
-            guard let location = self.location else { return }
-            self.cityName.text = location.name
-        }
-    }
-    
+
     var cityData: FavoriteCity? {
         didSet {
             guard let cityData = self.cityData else { return }
             self.cityName.text = cityData.location?.name
-            self.currentTemperature.text = String(cityData.currentWeather?.detailWeather.temperature ?? 100)
+            let temperature = cityData.currentWeather?.detailWeather.temperature.rounded()
+            self.currentTemperature.text = String(Int(temperature ?? 100))
         }
     }
-    
-    var weather: CurrentWeather? {
-        didSet {
-            guard let weather = self.weather else { return }
-            self.cityName.text = weather.cityName
-            self.currentTemperature.text = String(Int(weather.detailWeather.temperature.rounded()) ?? 100)
-        }
-    }
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         

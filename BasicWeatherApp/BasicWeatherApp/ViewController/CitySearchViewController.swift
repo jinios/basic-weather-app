@@ -42,8 +42,7 @@ class CitySearchViewController: UIViewController {
     }
     
     private func dismiss() {
-        guard let presentingVC = self.presentingViewController as? FavoriteListViewController else { return }
-        presentingVC.dismiss(animated: true, completion: nil)
+        self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func closeCitySearch(_ sender: Any) {
@@ -107,7 +106,7 @@ extension CitySearchViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let completer = resultCities?[indexPath.row] else { return }
-        
+
         let selectedCityName = completer.title
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = selectedCityName
@@ -126,14 +125,14 @@ extension CitySearchViewController: UITableViewDelegate {
             let lng = mapItem.placemark.coordinate.longitude
             
             let locationItem = LocationItem(latitude: lat, longitude: lng, name: name, sub: nil)
-            DataSetter.fetch(of: locationItem, handler: self.addFavoriteCity(location:currentWeather:) )
+            DataSetter.fetch(of: locationItem, handler: self.addFavoriteCity(_:) )
         }
         
     }
     
-    func addFavoriteCity(location: LocationItem, currentWeather: CurrentWeather) {
+    func addFavoriteCity(_ city: FavoriteCity) {
         DispatchQueue.main.async {
-            self.favoriteCityListManager?.addCity(locationitem: location, currentWeather: currentWeather)
+            self.favoriteCityListManager?.addCity(city)
             self.dismiss()
         }
     }

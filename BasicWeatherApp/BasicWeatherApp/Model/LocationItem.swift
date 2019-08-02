@@ -16,17 +16,15 @@ enum QueryItemKey: String {
     case units
 }
 
-class LocationItem {
+struct LocationItem {
     var latitude: Double?
     var longitude: Double?
     var name: String?
-    var sub: String?
     
     init(latitude: Double?, longitude: Double, name: String?, sub: String?) {
         self.latitude = latitude
         self.longitude = longitude
         self.name = name
-        self.sub = sub
     }
 }
 

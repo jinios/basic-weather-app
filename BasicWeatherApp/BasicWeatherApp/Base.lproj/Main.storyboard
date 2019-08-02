@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="DyS-vH-pP2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="npV-0v-jtN">
     <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -18,35 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KG7-qd-JmL">
-                                <rect key="frame" x="0.0" y="44" width="414" height="67"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S3O-If-l8z">
-                                        <rect key="frame" x="359" y="18" width="30" height="30"/>
-                                        <state key="normal" title="검색"/>
-                                        <connections>
-                                            <action selector="openSearchCity:" destination="DyS-vH-pP2" eventType="touchUpInside" id="IOl-eQ-hXG"/>
-                                            <segue destination="BYZ-38-t0r" kind="presentation" identifier="openSearchCity" id="vxy-55-smK"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="즐겨찾는도시" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Ca-On-gCL">
-                                        <rect key="frame" x="162.5" y="23" width="89" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="S3O-If-l8z" secondAttribute="trailing" constant="25" id="3Wl-wb-vwO"/>
-                                    <constraint firstAttribute="height" constant="67" id="Nnh-ve-JGw"/>
-                                    <constraint firstItem="S3O-If-l8z" firstAttribute="top" secondItem="KG7-qd-JmL" secondAttribute="top" constant="18" id="bUL-lJ-QkZ"/>
-                                    <constraint firstItem="3Ca-On-gCL" firstAttribute="centerX" secondItem="KG7-qd-JmL" secondAttribute="centerX" id="dA9-zP-n47"/>
-                                    <constraint firstItem="3Ca-On-gCL" firstAttribute="centerY" secondItem="KG7-qd-JmL" secondAttribute="centerY" id="eeg-A3-r41"/>
-                                </constraints>
-                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CzH-C7-who">
-                                <rect key="frame" x="0.0" y="111" width="414" height="751"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCityTableViewCell" rowHeight="100" id="CZ1-x9-vUP" customClass="FavoriteCityTableViewCell" customModule="BasicWeatherApp" customModuleProvider="target">
@@ -90,24 +63,33 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="KG7-qd-JmL" firstAttribute="trailing" secondItem="WqA-4b-kWD" secondAttribute="trailing" id="9qr-8s-wUD"/>
+                            <constraint firstItem="CzH-C7-who" firstAttribute="top" secondItem="WqA-4b-kWD" secondAttribute="top" id="0ef-6a-QHi"/>
                             <constraint firstItem="WqA-4b-kWD" firstAttribute="bottom" secondItem="CzH-C7-who" secondAttribute="bottom" id="STe-Qd-3IQ"/>
                             <constraint firstItem="CzH-C7-who" firstAttribute="trailing" secondItem="WqA-4b-kWD" secondAttribute="trailing" id="W3E-Ld-Jt9"/>
-                            <constraint firstItem="KG7-qd-JmL" firstAttribute="leading" secondItem="WqA-4b-kWD" secondAttribute="leading" id="WSV-pO-I9v"/>
-                            <constraint firstItem="CzH-C7-who" firstAttribute="top" secondItem="KG7-qd-JmL" secondAttribute="bottom" id="eo8-RD-uJR"/>
-                            <constraint firstItem="KG7-qd-JmL" firstAttribute="top" secondItem="WqA-4b-kWD" secondAttribute="top" id="ieD-VG-U8r"/>
                             <constraint firstItem="CzH-C7-who" firstAttribute="leading" secondItem="WqA-4b-kWD" secondAttribute="leading" id="pj8-pj-o1X"/>
                             <constraint firstItem="CzH-C7-who" firstAttribute="leading" secondItem="WqA-4b-kWD" secondAttribute="leading" id="qCP-Ny-YJw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="WqA-4b-kWD"/>
                     </view>
+                    <navigationItem key="navigationItem" id="ell-yF-wqT">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="hdI-9P-oNN">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="S3O-If-l8z">
+                                <rect key="frame" x="364" y="7" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="검색"/>
+                                <connections>
+                                    <action selector="openSearchCity:" destination="DyS-vH-pP2" eventType="touchUpInside" id="IOl-eQ-hXG"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="CzH-C7-who" id="Inm-fO-YcC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pmv-j4-9ru" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-713.04347826086962" y="135.9375"/>
+            <point key="canvasLocation" x="197.10144927536234" y="135.9375"/>
         </scene>
         <!--City Search View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -207,7 +189,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1" y="136"/>
+            <point key="canvasLocation" x="197" y="805"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="MqZ-1Y-XoL">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="npV-0v-jtN" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ONp-jN-4xJ">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="DyS-vH-pP2" kind="relationship" relationship="rootViewController" id="Wp7-Kj-vxU"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5fX-1g-Y7m" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-713.04347826086962" y="135.9375"/>
         </scene>
     </scenes>
 </document>

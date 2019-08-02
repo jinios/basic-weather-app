@@ -23,6 +23,7 @@
 		93CAC58D22F2CB8A00A4EBE4 /* KeyInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93CAC58822F2CB8A00A4EBE4 /* KeyInfo.plist */; };
 		93CAC58E22F2CB8A00A4EBE4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CAC58922F2CB8A00A4EBE4 /* Extensions.swift */; };
 		93CAC58F22F2CB8A00A4EBE4 /* KeyInfoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CAC58A22F2CB8A00A4EBE4 /* KeyInfoLoader.swift */; };
+		FD1EF33322F47BD500EFAFA2 /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1EF33222F47BD500EFAFA2 /* DataStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		93CAC58822F2CB8A00A4EBE4 /* KeyInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = KeyInfo.plist; sourceTree = "<group>"; };
 		93CAC58922F2CB8A00A4EBE4 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		93CAC58A22F2CB8A00A4EBE4 /* KeyInfoLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyInfoLoader.swift; sourceTree = "<group>"; };
+		FD1EF33222F47BD500EFAFA2 /* DataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,8 @@
 		936006F222F3F71F00F21315 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				93CAC58922F2CB8A00A4EBE4 /* Extensions.swift */,
+				FD1EF33222F47BD500EFAFA2 /* DataStorage.swift */,
 				93CAC58722F2CB8A00A4EBE4 /* DataSetter.swift */,
 				93CAC58A22F2CB8A00A4EBE4 /* KeyInfoLoader.swift */,
 			);
@@ -138,7 +142,6 @@
 				936006F022F3F6C900F21315 /* TableViewCell */,
 				936006F122F3F6F400F21315 /* Model */,
 				936006F222F3F71F00F21315 /* Helper */,
-				93CAC58922F2CB8A00A4EBE4 /* Extensions.swift */,
 				93CAC56422F2C62E00A4EBE4 /* AppDelegate.swift */,
 				93CAC56822F2C62E00A4EBE4 /* Main.storyboard */,
 				93CAC56D22F2C62E00A4EBE4 /* LaunchScreen.storyboard */,
@@ -263,6 +266,7 @@
 				93CAC56722F2C62E00A4EBE4 /* CitySearchViewController.swift in Sources */,
 				93CAC58E22F2CB8A00A4EBE4 /* Extensions.swift in Sources */,
 				93BD120622F2F40E009BD4E6 /* FavoriteListViewController.swift in Sources */,
+				FD1EF33322F47BD500EFAFA2 /* DataStorage.swift in Sources */,
 				93CAC58C22F2CB8A00A4EBE4 /* DataSetter.swift in Sources */,
 				93BD120822F30BC7009BD4E6 /* Weather.swift in Sources */,
 				93CAC58B22F2CB8A00A4EBE4 /* LocationItem.swift in Sources */,
