@@ -156,6 +156,12 @@
                                                 <constraint firstItem="1Kl-ez-Lt8" firstAttribute="top" secondItem="krX-PA-3b3" secondAttribute="topMargin" id="tmF-PX-0j6"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="cityNameLabel" destination="1Kl-ez-Lt8" id="fd1-cb-Wah"/>
+                                            <outlet property="descriptionLabel" destination="Ml7-PY-AN2" id="zlP-v3-JAR"/>
+                                            <outlet property="temperatureLabel" destination="hLr-ug-Ys0" id="4pg-gO-eRi"/>
+                                            <outlet property="weatherIcon" destination="3bW-pZ-CtA" id="MIH-22-5n5"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="HourlyWeatherTableViewCell" rowHeight="130" id="0YO-Zy-Ubc" userLabel="Hourly Weather Table View Cell" customClass="HourlyWeatherTableViewCell" customModule="BasicWeatherApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="255.5" width="414" height="130"/>

@@ -26,6 +26,7 @@ class DataSetter {
             URLQueryItem(name: QueryItemKey.latitude.rawValue, value: String(lat)),
             URLQueryItem(name: QueryItemKey.longitude.rawValue, value: String(lng)),
             URLQueryItem(name: QueryItemKey.units.rawValue, value: "metric"),
+            URLQueryItem(name: QueryItemKey.units.rawValue, value: "kr"),
             URLQueryItem(name: QueryItemKey.appid.rawValue, value: appId)
         ]
         
