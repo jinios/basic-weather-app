@@ -24,6 +24,7 @@ class KeyInfoLoader {
 enum KeyInfo: String {
     case WeatherBaseURL
     case APIKey
+    case IconBaseURL
 }
 
 
