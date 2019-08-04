@@ -48,40 +48,45 @@ class DataSetter {
             }
             }.resume()
     }
-    
-    class func fetch(of cityId: String, handler: @escaping(([CurrentWeather]) -> Void)) {
+
+    class func fetch(of city: FavoriteCity, handler: @escaping((Forecast, FavoriteCity) -> Void)) {
+        guard let lat = city.location?.latitude else { return }
+        guard let lng = city.location?.longitude else { return }
         guard let baseUrl = KeyInfoLoader.loadValue(of: .WeatherBaseURL) else { return }
         guard let appId = KeyInfoLoader.loadValue(of: .APIKey) else { return }
-        
+
+        // 파라미터 전달로 수정
         var base = URL(string: baseUrl)
-        base?.appendPathComponent("group")
-        
+        base?.appendPathComponent("forecast") // pathComponent enum으로 수정
+
         var urlComponents = URLComponents(url: base!, resolvingAgainstBaseURL: true)
-        
+
+        // 파라미터 전달로 수정
         urlComponents?.queryItems = [
-            URLQueryItem(name: QueryItemKey.cityId.rawValue, value: cityId),
+            URLQueryItem(name: QueryItemKey.latitude.rawValue, value: String(lat)),
+            URLQueryItem(name: QueryItemKey.longitude.rawValue, value: String(lng)),
             URLQueryItem(name: QueryItemKey.units.rawValue, value: "metric"),
+            URLQueryItem(name: QueryItemKey.units.rawValue, value: "kr"),
             URLQueryItem(name: QueryItemKey.appid.rawValue, value: appId)
         ]
-        
+
         guard let sessionUrl = urlComponents?.url else { return }
         let configure = URLSessionConfiguration.default
         configure.timeoutIntervalForRequest = 15
         let urlSession = URLSession(configuration: configure)
-        
+
         urlSession.dataTask(with: sessionUrl) {(data, response, err) in
             if let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode, let data = data {
                 do {
                     print(data.prettyPrintedJSONString!)
-                    let currentWeather = try JSONDecoder().decode(GroupCurrentWeather.self, from: data).list
-                    let temp = LocationItem(latitude: 0, longitude: 0, name: "", sub: "")
-                    handler(currentWeather)
+                    let currentWeather = try JSONDecoder().decode(Forecast.self, from: data)
+                    handler(currentWeather, city)
                 } catch {
                     print("FAIL TO DECODE")
                 }
             }
             }.resume()
-    
+
     }
 }
 

@@ -14,6 +14,7 @@ enum QueryItemKey: String {
     case cityId = "id"
     case appid
     case units
+    case language = "lang"
 }
 
 struct LocationItem {
