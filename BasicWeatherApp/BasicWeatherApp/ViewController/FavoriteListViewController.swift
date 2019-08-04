@@ -8,11 +8,27 @@
 
 import UIKit
 
+class IconDownloadViewController: UIViewController {
+
+    func downloadIcon(of cell: IconPresentable, iconKey: String) {
+        ImageSetter.fetch(iconKey: iconKey) { (imageData) in
+            DispatchQueue.main.async {
+                if let imageData = imageData {
+                    cell.setWeatherIcon(image: UIImage(data: imageData))
+                } else {
+                    cell.setWeatherIcon(image: nil)
+                }
+            }
+        }
+    }
+
+}
+
 protocol FavoriteCityDelegate: class {
     func addCity(_ city: FavoriteCity)
 }
 
-class FavoriteListViewController: UIViewController {
+class FavoriteListViewController: IconDownloadViewController {
 
     @IBOutlet weak var tableView: UITableView!
    
@@ -53,6 +69,18 @@ class FavoriteListViewController: UIViewController {
         }
     }
 
+//    private func downloadIcon(of cell: IconPresentable, iconKey: String) {
+//        ImageSetter.fetch(iconKey: iconKey) { (imageData) in
+//            DispatchQueue.main.async {
+//                if let imageData = imageData {
+//                    cell.setWeatherIcon(image: UIImage(data: imageData))
+//                } else {
+//                    cell.setWeatherIcon(image: nil)
+//                }
+//            }
+//        }
+//    }
+
 }
 
 extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -63,6 +91,7 @@ extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteCityTableViewCell", for: indexPath) as? FavoriteCityTableViewCell else { return UITableViewCell() }
         cell.cityData = self.cities[indexPath.row]
+        downloadIcon(of: cell, iconKey: cell.cityData?.currentWeather?.weather.first?.icon ?? "")
 
         return cell
     }

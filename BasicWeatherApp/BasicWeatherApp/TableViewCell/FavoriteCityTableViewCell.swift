@@ -8,10 +8,23 @@
 
 import UIKit
 
-class FavoriteCityTableViewCell: UITableViewCell {
+protocol IconPresentable: class {
+    var weatherIconImageView: UIImageView! { get }
+    func setWeatherIcon(image: UIImage?)
+}
+
+extension IconPresentable {
+    func setWeatherIcon(image: UIImage?) {
+        guard let image = image else { return }
+        weatherIconImageView.image = image
+    }
+}
+
+class FavoriteCityTableViewCell: UITableViewCell, IconPresentable {
 
     @IBOutlet weak var cityName: UILabel!
     @IBOutlet weak var currentTemperature: UILabel!
+    @IBOutlet weak var weatherIconImageView: UIImageView!
 
     var cityData: FavoriteCity? {
         didSet {
@@ -29,5 +42,4 @@ class FavoriteCityTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
 }
