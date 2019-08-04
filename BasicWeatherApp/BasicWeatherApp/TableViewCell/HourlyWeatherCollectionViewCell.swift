@@ -9,5 +9,22 @@
 import UIKit
 
 class HourlyWeatherCollectionViewCell: UICollectionViewCell {
-    
+
+    var forecast: ForecastWeather? {
+        didSet {
+            self.set()
+        }
+    }
+
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var weatherIcon: UIImageView!
+    @IBOutlet weak var temperatureLabel: UILabel!
+
+    func set() {
+        guard let forecast = self.forecast else { return }
+        self.timeLabel.text = forecast.dateText?.convertDate?.convertAMPMHHMM()
+        self.temperatureLabel.text = forecast.detailWeather.temperature.text
+    }
+
+
 }

@@ -14,17 +14,12 @@ class CurrentDetailTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
-    }
-
-    func setDataSource(dataSource: UICollectionViewDataSource, at row: Int) {
+    func setDataSource(dataSource: UICollectionViewDataSource & UICollectionViewDelegateFlowLayout, at row: Int) {
         currentDetailCollectionView.dataSource = dataSource
+        currentDetailCollectionView.delegate = dataSource
         currentDetailCollectionView.tag = row
         currentDetailCollectionView.reloadData()
     }

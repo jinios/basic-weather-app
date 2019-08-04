@@ -37,6 +37,22 @@ class FavoriteListViewController: UIViewController {
         self.present(nextVC, animated: true, completion: nil)
     }
 
+    func fetchForecast(at index: Int) {
+        DataSetter.fetch(of: self.cities[index]) { forecast, city in
+            self.pushToDetailWeather(forecast: forecast, city: city)
+        }
+    }
+
+    func pushToDetailWeather(forecast: Forecast, city: FavoriteCity) {
+        guard let detailWeatherVC = self.storyboard?.instantiateViewController(withIdentifier: "DetailWeatherViewController") as? DetailWeatherViewController else { return }
+        detailWeatherVC.city = city
+        detailWeatherVC.weatherInfo = forecast
+
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(detailWeatherVC, animated: true)
+        }
+    }
+
 }
 
 extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -52,7 +68,7 @@ extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        self.fetchForecast(at: indexPath.row)
     }
     
 }

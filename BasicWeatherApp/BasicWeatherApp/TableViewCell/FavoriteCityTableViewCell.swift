@@ -17,8 +17,7 @@ class FavoriteCityTableViewCell: UITableViewCell {
         didSet {
             guard let cityData = self.cityData else { return }
             self.cityName.text = cityData.location?.name
-            let temperature = cityData.currentWeather?.detailWeather.temperature.rounded()
-            self.currentTemperature.text = String(Int(temperature ?? 100))
+            self.currentTemperature.text = cityData.currentWeather?.detailWeather.temperature.text
         }
     }
 

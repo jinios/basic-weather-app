@@ -107,9 +107,9 @@
 		936006F022F3F6C900F21315 /* TableViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				FD68438A22F5D63E00CF02BF /* WeatherSummaryTableViewCell.swift */,
 				93CAC58422F2C91D00A4EBE4 /* CitySearchTableViewCell.swift */,
 				93BD120322F2F3CB009BD4E6 /* FavoriteCityTableViewCell.swift */,
+				FD68438A22F5D63E00CF02BF /* WeatherSummaryTableViewCell.swift */,
 				FD7EC0D422F4C3CE00162F51 /* HourlyWeatherTableViewCell.swift */,
 				FD7EC0D622F4C47900162F51 /* WeeklyWeatherTableViewCell.swift */,
 				FD7EC0D822F4C4FB00162F51 /* CurrentDetailTableViewCell.swift */,

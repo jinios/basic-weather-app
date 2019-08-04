@@ -17,17 +17,11 @@ class HourlyWeatherTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
-    func setDataSource(dataSource: UICollectionViewDataSource, at row: Int) {
+    func setDataSource(dataSource: UICollectionViewDataSource, at index: Int) {
         hourlyWeatherCollectionView.dataSource = dataSource
-        hourlyWeatherCollectionView.tag = row
+        hourlyWeatherCollectionView.tag = index
         hourlyWeatherCollectionView.reloadData()
     }
-}
 
+}
 

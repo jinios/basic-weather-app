@@ -14,6 +14,8 @@ class WeatherSummaryTableViewCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var weatherIcon: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
+    @IBOutlet weak var sunriseTimeLabel: UILabel!
+    @IBOutlet weak var sunsetTimeLabel: UILabel!
 
     var summary: FavoriteCity? {
         didSet { self.set()}
@@ -21,20 +23,18 @@ class WeatherSummaryTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     private func set() {
         guard let summary = self.summary else { return }
         self.cityNameLabel.text = summary.location?.name
         self.descriptionLabel.text = summary.currentWeather?.weather[0].description
-        self.temperatureLabel.text = String(summary.currentWeather?.detailWeather.temperature ?? 0)
-    }
+        self.temperatureLabel.text = summary.currentWeather?.detailWeather.temperature.text
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        let sunriseDate = Date(timeIntervalSince1970: summary.currentWeather?.system?.sunrise ?? 0)
+        let sunsetDate = Date(timeIntervalSince1970: summary.currentWeather?.system?.sunset ?? 0)
+        self.sunriseTimeLabel.text = "↑ \(sunriseDate.convertAMPMHHMM())"
+        self.sunsetTimeLabel.text = "↓ \(sunsetDate.convertAMPMHHMM())"
     }
 
 }
