@@ -18,8 +18,10 @@ class DetailWeatherViewController: UIViewController {
             self.currentDetailList = CurrentDetailList(currentWeather: city.currentWeather!)
         }
     }
+
     var weatherInfo: Forecast?
     var currentDetailList: CurrentDetailList?
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +85,7 @@ extension DetailWeatherViewController: UITableViewDelegate {
         switch indexPath.section {
         case 0: return 230
         case 1: return 130
-        case 2: return 250
+        case 2: return CGFloat(50 * (self.weatherInfo?.weeklyForecast().count ?? 0))
         case 3: return CGFloat(60 * ((self.currentDetailList?.count)! / 2))
         default: return 400
         }
@@ -98,7 +100,7 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
         case 1:
             return self.weatherInfo?.list.count ?? 0
         case 2:
-            return 0
+            return self.weatherInfo?.weeklyForecast().count ?? 0
         case 3:
             return self.currentDetailList?.count ?? 0
         default: return 0
@@ -112,6 +114,11 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyWeatherCollectionViewCell", for: indexPath) as! HourlyWeatherCollectionViewCell
             cell.forecast = self.weatherInfo?.list[indexPath.row]
+            return cell
+
+        case 2:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeeklyWeatherCollectionViewCell", for: indexPath) as! WeeklyWeatherCollectionViewCell
+            cell.forecast = self.weatherInfo?.weeklyForecast()[indexPath.row]
             return cell
 
         case 3: let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: "CurrentDetailCollectionViewCell", for: indexPath) as! CurrentDetailCollectionViewCell

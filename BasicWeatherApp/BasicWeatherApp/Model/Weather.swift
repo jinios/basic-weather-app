@@ -413,7 +413,10 @@ struct Forecast: Codable {
         try? container.encode(code, forKey: .code)
         try? container.encode(message, forKey: .message)
     }
-    
+
+    func weeklyForecast() -> [ForecastWeather] {
+        return self.list.filter{ $0.dateText?.hasSuffix("12:00:00") ?? false }
+    }
 }
 
 
