@@ -8,10 +8,9 @@
 
 import UIKit
 
-class WeeklyWeatherCollectionViewCell: UICollectionViewCell {
-
+class WeeklyWeatherCollectionViewCell: UICollectionViewCell, IconPresentable{
     @IBOutlet weak var weekdayLabel: UILabel!
-    @IBOutlet weak var weatherIcon: UIImageView!
+    @IBOutlet weak var weatherIconImageView: UIImageView!
     @IBOutlet weak var maxTemperatureLabel: UILabel!
     @IBOutlet weak var minTemperatureLabel: UILabel!
 

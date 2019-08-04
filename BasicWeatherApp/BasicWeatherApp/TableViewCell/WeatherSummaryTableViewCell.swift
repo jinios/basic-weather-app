@@ -8,11 +8,11 @@
 
 import UIKit
 
-class WeatherSummaryTableViewCell: UITableViewCell {
+class WeatherSummaryTableViewCell: UITableViewCell, IconPresentable {
 
     @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var weatherIcon: UIImageView!
+    @IBOutlet weak var weatherIconImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var sunriseTimeLabel: UILabel!
     @IBOutlet weak var sunsetTimeLabel: UILabel!
@@ -36,5 +36,6 @@ class WeatherSummaryTableViewCell: UITableViewCell {
         self.sunriseTimeLabel.text = "↑ \(sunriseDate.convertAMPMHHMM())"
         self.sunsetTimeLabel.text = "↓ \(sunsetDate.convertAMPMHHMM())"
     }
+
 
 }

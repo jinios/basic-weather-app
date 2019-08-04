@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HourlyWeatherCollectionViewCell: UICollectionViewCell {
+class HourlyWeatherCollectionViewCell: UICollectionViewCell, IconPresentable {
 
     var forecast: ForecastWeather? {
         didSet {
@@ -17,7 +17,7 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell {
     }
 
     @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var weatherIcon: UIImageView!
+    @IBOutlet weak var weatherIconImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
 
     func set() {
@@ -25,6 +25,5 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell {
         self.timeLabel.text = forecast.dateText?.convertDate?.convertAMPMHHMM()
         self.temperatureLabel.text = forecast.detailWeather.temperature.text
     }
-
 
 }

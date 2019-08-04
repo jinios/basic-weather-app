@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DetailWeatherViewController: UIViewController {
+class DetailWeatherViewController: IconDownloadViewController {
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -27,7 +27,6 @@ class DetailWeatherViewController: UIViewController {
         super.viewDidLoad()
         self.tableView.rowHeight = UITableView.automaticDimension
     }
-
 }
 
 
@@ -46,36 +45,31 @@ extension DetailWeatherViewController: UITableViewDataSource {
 
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherSummaryTableViewCell", for: indexPath) as? WeatherSummaryTableViewCell
-            cell?.summary = self.city
-            return cell ?? UITableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherSummaryTableViewCell", for: indexPath) as! WeatherSummaryTableViewCell
+            cell.summary = self.city
+            downloadIcon(of: cell, iconKey: cell.summary?.currentWeather?.weather.first?.icon ?? "")
+            return cell
 
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "HourlyWeatherTableViewCell", for: indexPath) as? HourlyWeatherTableViewCell
-            cell?.setDataSource(dataSource: self, at: indexPath.section)
-            return cell ?? UITableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: "HourlyWeatherTableViewCell", for: indexPath) as! HourlyWeatherTableViewCell
+            cell.setDataSource(dataSource: self, at: indexPath.section)
+            return cell
 
         case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "WeeklyWeatherTableViewCell", for: indexPath) as? WeeklyWeatherTableViewCell
-            cell?.setDataSource(dataSource: self, at: indexPath.section)
-            return cell ?? UITableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: "WeeklyWeatherTableViewCell", for: indexPath) as! WeeklyWeatherTableViewCell
+            cell.setDataSource(dataSource: self, at: indexPath.section)
+            return cell
 
         case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentDetailTableViewCell", for: indexPath) as? CurrentDetailTableViewCell
-            cell?.setDataSource(dataSource: self, at: indexPath.section)
-            return cell ?? UITableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentDetailTableViewCell", for: indexPath) as! CurrentDetailTableViewCell
+            cell.setDataSource(dataSource: self, at: indexPath.section)
+            return cell
 
         default:
             return UITableViewCell()
         }
     }
 
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        switch section {
-//        case 0: return 5
-//        default: return 5
-//        }
-//    }
 }
 
 
@@ -114,11 +108,13 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyWeatherCollectionViewCell", for: indexPath) as! HourlyWeatherCollectionViewCell
             cell.forecast = self.weatherInfo?.list[indexPath.row]
+            downloadIcon(of: cell, iconKey: cell.forecast?.weather.first?.icon ?? "")
             return cell
 
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeeklyWeatherCollectionViewCell", for: indexPath) as! WeeklyWeatherCollectionViewCell
             cell.forecast = self.weatherInfo?.weeklyForecast()[indexPath.row]
+            downloadIcon(of: cell, iconKey: cell.forecast?.weather.first?.icon ?? "")
             return cell
 
         case 3: let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: "CurrentDetailCollectionViewCell", for: indexPath) as! CurrentDetailCollectionViewCell
