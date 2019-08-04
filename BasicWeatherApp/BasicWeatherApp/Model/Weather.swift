@@ -8,6 +8,11 @@
 
 import Foundation
 
+typealias Humidity = Int
+typealias Pressure = Float
+typealias Temperature = Float
+
+
 struct GeoPoint: Codable {
     private(set) var longitude: Double
     private(set) var latitude: Double
@@ -68,13 +73,13 @@ struct Weather: Codable {
 
 struct DetailWeather: Codable {
     
-    private(set) var temperature: Float
-    private(set) var minTemperature: Float
-    private(set) var maxTemperature: Float
-    private(set) var pressure: Float?
+    private(set) var temperature: Temperature
+    private(set) var minTemperature: Temperature
+    private(set) var maxTemperature: Temperature
+    private(set) var pressure: Pressure?
     private(set) var seaLevel: Float?
     private(set) var groundLevel: Float?
-    private(set) var humidity: Int?
+    private(set) var humidity: Humidity?
     
     private enum CodingKeys: String, CodingKey {
         case temperature = "temp"
@@ -88,9 +93,9 @@ struct DetailWeather: Codable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        temperature = try container.decode(Float.self, forKey: .temperature)
-        minTemperature = try container.decode(Float.self, forKey: .minimumTemperature)
-        maxTemperature = try container.decode(Float.self, forKey: .maximumTemperature)
+        temperature = try container.decode(Temperature.self, forKey: .temperature)
+        minTemperature = try container.decode(Temperature.self, forKey: .minimumTemperature)
+        maxTemperature = try container.decode(Temperature.self, forKey: .maximumTemperature)
         pressure = try? container.decode(Float.self, forKey: .pressure)
         seaLevel = try? container.decode(Float.self, forKey: .seaLevel)
         groundLevel = try? container.decode(Float.self, forKey: .groundLevel)
@@ -110,8 +115,16 @@ struct DetailWeather: Codable {
     
 }
 
-struct Wind: Codable {
-    
+struct Wind: Codable, MiscellaneousDetailWeather {
+
+    var title: String {
+        return "바람"
+    }
+
+    var value: String {
+        return "\(speed.rounded())m/s, \(direction())"
+    }
+
     private(set) var speed: Float
     private(set) var degrees: Float
     
@@ -131,12 +144,33 @@ struct Wind: Codable {
         try container.encode(speed, forKey: .speed)
         try container.encode(degrees, forKey: .degrees)
     }
+
+    private func direction() -> String {
+        switch self.degrees.rounded() {
+        case 360, 0..<1: return"북풍"
+        case 1..<90: return "북동풍"
+        case 90..<91: return "동풍"
+        case 91..<180: return "남동풍"
+        case 180..<181: return "남풍"
+        case 181..<270: return "남서풍"
+        case 270: return "서풍"
+        default: return "북서풍"
+        }
+    }
 }
 
-struct Clouds: Codable {
+struct Clouds: Codable, MiscellaneousDetailWeather {
     
     private(set) var all: Int
-    
+
+    var title: String {
+        return "구름"
+    }
+
+    var value: String {
+        return "\(all)%"
+    }
+
     private enum CodingKeys: String, CodingKey {
         case all
     }
@@ -152,41 +186,65 @@ struct Clouds: Codable {
     }
 }
 
-struct Rain: Codable {
-    
-    private(set) var volume3Hours: Float // Rain volume for the last 3 hours
+struct Rain: Codable, MiscellaneousDetailWeather {
+
+    var title: String {
+        return "비"
+    }
+
+    var value: String {
+        return "\(volume3Hours)mm"
+    }
+
+    private(set) var volume1Hours: Float? // volume for the last 1 hours
+    private(set) var volume3Hours: Float // volume for the last 3 hours
     
     private enum CodingKeys: String, CodingKey {
-        case volume3Hours = "3h"
+        case volumeFor1Hours = "1h"
+        case volumeFor3Hours = "3h"
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        volume3Hours = try container.decode(Float.self, forKey: .volume3Hours)
+        volume1Hours = try? container.decode(Float.self, forKey: .volumeFor1Hours)
+        volume3Hours = try container.decode(Float.self, forKey: .volumeFor3Hours)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(volume3Hours, forKey: .volume3Hours)
+        try? container.encode(volume1Hours, forKey: .volumeFor1Hours)
+        try container.encode(volume3Hours, forKey: .volumeFor3Hours)
     }
 }
 
-struct Snow: Codable {
-    
-    private(set) var volume3Hours: Float // Snow volume for the last 3 hours
-    
+struct Snow: Codable, MiscellaneousDetailWeather {
+
+    var title: String {
+        return "눈"
+    }
+
+    var value: String {
+        return "\(volume3Hours)mm"
+    }
+
+    private(set) var volume1Hours: Float? // volume for the last 1 hours
+    private(set) var volume3Hours: Float // volume for the last 3 hours
+
     private enum CodingKeys: String, CodingKey {
-        case volume3Hours = "3h"
+        case volumeFor1Hours = "1h"
+        case volumeFor3Hours = "3h"
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        volume3Hours = try container.decode(Float.self, forKey: .volume3Hours)
+        volume1Hours = try? container.decode(Float.self, forKey: .volumeFor1Hours)
+        volume3Hours = try container.decode(Float.self, forKey: .volumeFor3Hours)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(volume3Hours, forKey: .volume3Hours)
+        try? container.encode(volume1Hours, forKey: .volumeFor1Hours)
+        try container.encode(volume3Hours, forKey: .volumeFor3Hours)
     }
 
 }
@@ -248,7 +306,7 @@ struct CurrentWeather: Codable {
         return lhs.cityID == rhs.cityID
     }
     
-    private(set) var geoPoint: GeoPoint
+    private(set) var geoPoint: GeoPoint?
     private(set) var weather: [Weather]
     private(set) var detailWeather: DetailWeather
     private(set) var wind: Wind?
@@ -259,7 +317,9 @@ struct CurrentWeather: Codable {
     private(set) var cityID: Int?
     private var timeOfLastupdate: TimeInterval?
     private(set) var system: System?
-   
+    private(set) var visibility: Int?
+
+    private(set) var dateText: String?
     private var cod: Int?
     
     private enum CodingKeys: String, CodingKey {
@@ -274,12 +334,15 @@ struct CurrentWeather: Codable {
         case cityIdentifier = "id"
         case timeOfLastupdate = "dt"
         case system = "sys"
+        case visibility
+
+        case dateText = "dt_txt"
         case cod
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        cod = try? container.decode(Int.self, forKey: .cod)
+
         geoPoint = try container.decode(GeoPoint.self, forKey: .geoPoint)
         
         weather = try container.decode([Weather].self, forKey: .weather)
@@ -292,6 +355,10 @@ struct CurrentWeather: Codable {
         cityID = try? container.decode(Int.self, forKey: .cityIdentifier)
         timeOfLastupdate = try? container.decode(TimeInterval.self, forKey: .timeOfLastupdate)
         system = try? container.decode(System.self, forKey: .system)
+        visibility = try? container.decode(Int.self, forKey: .visibility)
+
+        dateText = try? container.decode(String.self, forKey: .dateText)
+        cod = try? container.decode(Int.self, forKey: .cod)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -308,27 +375,34 @@ struct CurrentWeather: Codable {
         try? container.encode(cityID, forKey: .cityIdentifier)
         try? container.encode(timeOfLastupdate, forKey: .timeOfLastupdate)
         try? container.encode(system, forKey: .system)
+        try? container.encode(visibility, forKey: .visibility)
+
+        try? container.encode(dateText, forKey: .dateText)
         try? container.encode(cod, forKey: .cod)
     }
-    
-    
-    
+
 }
 
-struct GroupCurrentWeather: Codable {
+struct Forecast: Codable {
     private(set) var count: Int
-    private(set) var list: [CurrentWeather]
-    
+    private(set) var list: [ForecastWeather]
+    private(set) var code: String?
+    private(set) var message: Double?
+
     private enum CodingKeys: String, CodingKey {
         case count = "cnt"
         case list
+        case code = "cod"
+        case message
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         count = try container.decode(Int.self, forKey: .count)
-        list = try container.decode([CurrentWeather].self, forKey: .list)
+        list = try container.decode([ForecastWeather].self, forKey: .list)
+        code = try? container.decode(String.self, forKey: .code)
+        message = try? container.decode(Double.self, forKey: .message)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -336,6 +410,87 @@ struct GroupCurrentWeather: Codable {
         
         try container.encode(count, forKey: .count)
         try container.encode(list, forKey: .list)
+        try? container.encode(code, forKey: .code)
+        try? container.encode(message, forKey: .message)
     }
     
+}
+
+
+struct ForecastWeather: Codable {
+
+    private(set) var timeOfLastupdate: Int
+    private(set) var detailWeather: DetailWeather
+    private(set) var weather: [Weather]
+    private(set) var clouds: Clouds?
+    private(set) var wind: Wind?
+    private(set) var rain: Rain?
+    private(set) var snow: Snow?
+    private(set) var dateText: String?
+
+    private enum CodingKeys: String, CodingKey {
+
+        case timeOfLastupdate = "dt"
+        case detailWeather = "main"
+        case weather
+        case clouds
+        case wind
+        case rain
+        case snow
+        case dateText = "dt_txt"
+
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        timeOfLastupdate = try container.decode(Int.self, forKey: .timeOfLastupdate)
+        detailWeather = try container.decode(DetailWeather.self, forKey: .detailWeather)
+        weather = try container.decode([Weather].self, forKey: .weather)
+        clouds = try? container.decode(Clouds.self, forKey: .clouds)
+        wind = try? container.decode(Wind.self, forKey: .wind)
+        rain = try? container.decode(Rain.self, forKey: .rain)
+        snow = try? container.decode(Snow.self, forKey: .snow)
+        dateText = try? container.decode(String.self, forKey: .dateText)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(timeOfLastupdate, forKey: .timeOfLastupdate)
+        try container.encode(detailWeather, forKey: .detailWeather)
+        try container.encode(weather, forKey: .weather)
+        try? container.encode(clouds, forKey: .clouds)
+        try? container.encode(wind, forKey: .wind)
+        try? container.encode(rain, forKey: .rain)
+        try? container.encode(snow, forKey: .snow)
+        try? container.encode(dateText, forKey: .dateText)
+    }
+
+}
+
+extension Humidity: MiscellaneousDetailWeather {
+    var title: String {
+        return "습도"
+    }
+
+    var value: String {
+        return "\(self)%"
+    }
+}
+
+extension Pressure: MiscellaneousDetailWeather {
+    var title: String {
+        return "기압"
+    }
+
+    var value: String {
+        return "\(Int(self.rounded()))hPa"
+    }
+}
+
+extension Temperature {
+    var text: String {
+        return "\(Int(self.rounded()))℃"
+    }
 }
