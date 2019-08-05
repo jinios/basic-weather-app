@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DetailWeatherViewController: IconDownloadViewController {
+class DetailWeatherViewController: UIViewController, IconDownloader {
 
     @IBOutlet weak var tableView: UITableView!
 

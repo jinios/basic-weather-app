@@ -8,18 +8,6 @@
 
 import UIKit
 
-protocol IconPresentable: class {
-    var weatherIconImageView: UIImageView! { get }
-    func setWeatherIcon(image: UIImage?)
-}
-
-extension IconPresentable {
-    func setWeatherIcon(image: UIImage?) {
-        guard let image = image else { return }
-        weatherIconImageView.image = image
-    }
-}
-
 class FavoriteCityTableViewCell: UITableViewCell, IconPresentable {
 
     @IBOutlet weak var cityName: UILabel!

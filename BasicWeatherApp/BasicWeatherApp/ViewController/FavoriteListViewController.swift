@@ -8,27 +8,7 @@
 
 import UIKit
 
-class IconDownloadViewController: UIViewController {
-
-    func downloadIcon(of cell: IconPresentable, iconKey: String) {
-        ImageSetter.fetch(iconKey: iconKey) { (imageData) in
-            DispatchQueue.main.async {
-                if let imageData = imageData {
-                    cell.setWeatherIcon(image: UIImage(data: imageData))
-                } else {
-                    cell.setWeatherIcon(image: nil)
-                }
-            }
-        }
-    }
-
-}
-
-protocol FavoriteCityDelegate: class {
-    func addCity(_ city: FavoriteCity)
-}
-
-class FavoriteListViewController: IconDownloadViewController {
+class FavoriteListViewController: UIViewController, IconDownloader {
 
     @IBOutlet weak var tableView: UITableView!
    
@@ -48,7 +28,7 @@ class FavoriteListViewController: IconDownloadViewController {
     
     @IBAction func openSearchCity(_ sender: Any) {
         guard let nextVC = self.storyboard?.instantiateViewController(withIdentifier: "CitySearchViewController") as? CitySearchViewController else { return }
-        nextVC.favoriteCityListManager = self
+        nextVC.favoriteCityDelegate = self
 
         self.present(nextVC, animated: true, completion: nil)
     }
@@ -69,19 +49,18 @@ class FavoriteListViewController: IconDownloadViewController {
         }
     }
 
-//    private func downloadIcon(of cell: IconPresentable, iconKey: String) {
-//        ImageSetter.fetch(iconKey: iconKey) { (imageData) in
-//            DispatchQueue.main.async {
-//                if let imageData = imageData {
-//                    cell.setWeatherIcon(image: UIImage(data: imageData))
-//                } else {
-//                    cell.setWeatherIcon(image: nil)
-//                }
-//            }
-//        }
-//    }
-
 }
+
+extension FavoriteListViewController: LocationTrackingDelegate {
+
+    func currentLocation(_ location: LocationItem?) {
+        guard let locationItem = location else { return }
+        DataSetter.fetch(of: locationItem) { (favoriteCity) in
+            self.cities.insert(favoriteCity, at: 0) // add weather of current user location at firstIndex
+        }
+    }
+}
+
 
 extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -110,6 +89,7 @@ extension FavoriteListViewController: FavoriteCityDelegate {
 
 }
 
+
 struct FavoriteCity: Hashable {
 
     var location: LocationItem?
@@ -128,3 +108,4 @@ struct FavoriteCity: Hashable {
         return lhs.currentWeather?.cityID == rhs.currentWeather?.cityID
     }
 }
+

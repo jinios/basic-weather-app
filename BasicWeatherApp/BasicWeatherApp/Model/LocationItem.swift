@@ -22,7 +22,7 @@ struct LocationItem {
     var longitude: Double?
     var name: String?
     
-    init(latitude: Double?, longitude: Double, name: String?, sub: String?) {
+    init(latitude: Double?, longitude: Double, name: String?) {
         self.latitude = latitude
         self.longitude = longitude
         self.name = name

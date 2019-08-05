@@ -26,11 +26,6 @@ class CurrentDetailCollectionViewCell: UICollectionViewCell {
 
 }
 
-protocol MiscellaneousDetailWeather {
-    var title: String { get }
-    var value: String { get }
-}
-
 struct CurrentDetailList {
 
     private let currentWeather: CurrentWeather

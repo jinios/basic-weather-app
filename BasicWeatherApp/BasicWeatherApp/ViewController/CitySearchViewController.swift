@@ -15,7 +15,7 @@ class CitySearchViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     var locationSearchCompleter: MKLocalSearchCompleter?
-    weak var favoriteCityListManager: FavoriteCityDelegate?
+    weak var favoriteCityDelegate: FavoriteCityDelegate?
     
     var resultCities: [MKLocalSearchCompletion]? {
         didSet {
@@ -124,7 +124,7 @@ extension CitySearchViewController: UITableViewDelegate {
             let lat = mapItem.placemark.coordinate.latitude
             let lng = mapItem.placemark.coordinate.longitude
             
-            let locationItem = LocationItem(latitude: lat, longitude: lng, name: name, sub: nil)
+            let locationItem = LocationItem(latitude: lat, longitude: lng, name: name)
             DataSetter.fetch(of: locationItem, handler: self.addFavoriteCity(_:) )
         }
         
@@ -132,7 +132,7 @@ extension CitySearchViewController: UITableViewDelegate {
     
     func addFavoriteCity(_ city: FavoriteCity) {
         DispatchQueue.main.async {
-            self.favoriteCityListManager?.addCity(city)
+            self.favoriteCityDelegate?.addCity(city)
             self.dismiss()
         }
     }
