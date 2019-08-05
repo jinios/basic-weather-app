@@ -21,11 +21,13 @@ struct LocationItem {
     var latitude: Double?
     var longitude: Double?
     var name: String?
+    var isTrackedLocation: Bool
     
-    init(latitude: Double?, longitude: Double, name: String?) {
+    init(latitude: Double?, longitude: Double, name: String?, isTrackedLocation: Bool = false) {
         self.latitude = latitude
         self.longitude = longitude
         self.name = name
+        self.isTrackedLocation = isTrackedLocation
     }
 }
 

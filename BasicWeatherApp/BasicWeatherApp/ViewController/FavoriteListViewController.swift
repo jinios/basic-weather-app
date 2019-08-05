@@ -11,7 +11,8 @@ import UIKit
 class FavoriteListViewController: UIViewController, IconDownloader {
 
     @IBOutlet weak var tableView: UITableView!
-   
+    private var locationTracker: LocationTracker?
+
     var cities: [FavoriteCity] = [] {
         didSet {
             DispatchQueue.main.async {
@@ -24,6 +25,9 @@ class FavoriteListViewController: UIViewController, IconDownloader {
         super.viewDidLoad()
         tableView.rowHeight = 100
         self.navigationItem.title = "즐겨찾는 도시"
+        locationTracker = LocationTracker()
+        locationTracker?.locationTrackingdelegate = self
+        locationTracker?.getLocation()
     }
     
     @IBAction func openSearchCity(_ sender: Any) {
