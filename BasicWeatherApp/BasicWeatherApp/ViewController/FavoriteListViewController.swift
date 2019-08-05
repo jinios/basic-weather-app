@@ -88,28 +88,9 @@ extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource
 extension FavoriteListViewController: FavoriteCityDelegate {
     
     func addCity(_ city: FavoriteCity) {
+        guard FavoriteList.shared.push(id: city) else { return }
         self.cities.append(city)
     }
 
-}
-
-
-struct FavoriteCity: Hashable {
-
-    var location: LocationItem?
-    var currentWeather: CurrentWeather?
-
-    func hash(into hasher: inout Hasher) {
-        return hasher.combine(currentWeather?.cityID ?? 0)
-    }
-
-    init(location: LocationItem, currentWeather: CurrentWeather?) {
-        self.location = location
-        self.currentWeather = currentWeather
-    }
-
-    static func == (lhs: FavoriteCity, rhs: FavoriteCity) -> Bool {
-        return lhs.currentWeather?.cityID == rhs.currentWeather?.cityID
-    }
 }
 
