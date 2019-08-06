@@ -18,12 +18,45 @@ extension Data {
     }
 }
 
+enum Time {
+    case second(Double)
+    case minute(Double)
+    case hour(Double)
+
+    var timeIntervalValue: Double {
+        switch self {
+        case let .second(value): return value
+        case let .minute(value): return value * 60
+        case let .hour(value): return value * 3600
+        }
+    }
+}
+
 extension Date {
 
     func convertToString(format: String) -> String {
         let formatter = DateFormatter.init()
         formatter.dateFormat = format
         return formatter.string(from: self)
+    }
+
+    func calculateDifferenceFromNow(target: Date, difference: Time, isTargetPast: Bool) -> Bool {
+        let differenceTimeInterval = difference.timeIntervalValue
+
+        let difference = self.timeIntervalSinceNow - target.timeIntervalSinceNow
+
+        let compare = differenceTimeInterval > difference
+
+        return false
+    }
+
+    func isFuture(from: Date) -> Bool {
+        let result = self.convertKST().timeIntervalSinceNow - from.timeIntervalSinceNow
+        return result > 0 ? true : false
+    }
+
+    func convertKST() -> Date {
+        return self.toStringKST().convertDate!
     }
 
     func convertHour() -> Int {
@@ -39,7 +72,7 @@ extension Date {
         return hour < 12 ? "오전" : "오후"
     }
 
-    func convertAMPMHHMM() -> String {
+    func convertAMPMHHMM(includeMinute: Bool) -> String {
         let standard = 12
         var result = self.convertAMPM()
 
@@ -49,7 +82,9 @@ extension Date {
             result.append(" \(self.convertHour())")
         }
 
-        result.append(":\(self.convertMinute())")
+        if includeMinute {
+            result.append(":\(self.convertMinute())")
+        }
         return result
     }
 
@@ -71,10 +106,30 @@ extension Date {
         return isShort ? result : "\(result)요일"
     }
 
+    func toString(formatter: String = "yyyy-MM-dd HH:mm:ss") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = formatter
+        dateFormatter.timeZone = TimeZone.autoupdatingCurrent
+        dateFormatter.locale = Locale.current
+        return dateFormatter.string(from: self)
+    }
+
+    func toStringKST(formatter: String = "yyyy-MM-dd HH:mm:ss") -> String {
+        return self.toString(formatter: formatter)
+    }
+
+    func toStringUTC(formatter: String = "yyyy-MM-dd HH:mm:ss") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = formatter
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        return dateFormatter.string(from: self)
+    }
+
+
 }
 
 extension String {
-    var convertDate : Date? {
+    var convertDate: Date? {
         get {
             let formatter: DateFormatter = DateFormatter()
             formatter.timeZone = TimeZone.init(abbreviation: "KST")

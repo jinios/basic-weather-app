@@ -22,7 +22,6 @@ class DetailWeatherViewController: UIViewController, IconDownloader {
     var weatherInfo: Forecast?
     var currentDetailList: CurrentDetailList?
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.rowHeight = UITableView.automaticDimension
@@ -93,7 +92,7 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView.tag {
         case 1:
-            return self.weatherInfo?.list.count ?? 0
+            return self.weatherInfo?.hourlyForecast().count ?? 0
         case 2:
             return self.weatherInfo?.weeklyForecast().count ?? 0
         case 3:
@@ -108,7 +107,7 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
         switch collectionView.tag {
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyWeatherCollectionViewCell", for: indexPath) as! HourlyWeatherCollectionViewCell
-            cell.forecast = self.weatherInfo?.list[indexPath.row]
+            cell.forecast = self.weatherInfo?.hourlyForecast()[indexPath.row]
             downloadIcon(of: cell, iconKey: cell.forecast?.weather.first?.icon ?? "")
             return cell
 

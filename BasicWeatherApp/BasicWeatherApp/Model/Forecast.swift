@@ -42,4 +42,11 @@ struct Forecast: Codable {
     func weeklyForecast() -> [ForecastWeather] {
         return self.list.filter{ $0.dateText?.hasSuffix("12:00:00") ?? false }
     }
+
+    func hourlyForecast() -> [ForecastWeather] {
+        let filteredList = self.list.filter {
+            $0.dateText?.convertDate?.isFuture(from: Date().convertKST()) ?? false
+        }
+        return filteredList
+    }
 }

@@ -22,7 +22,7 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell, IconPresentable {
 
     func set() {
         guard let forecast = self.forecast else { return }
-        self.timeLabel.text = forecast.dateText?.convertDate?.convertAMPMHHMM()
+        self.timeLabel.text = "\(forecast.dateText!.convertDate!.convertAMPMHHMM(includeMinute: false))시"
         self.temperatureLabel.text = forecast.detailWeather.temperature.text
     }
 
