@@ -18,16 +18,20 @@ class ImageSetter {
         if let imageData = cacheImageData(at: imageSavingPath) {
             handler(imageData)
         } else {
-            ImageSetter.download(iconKey: iconKey, handler: handler)
+            let imageHandlingQueue = DispatchQueue(label: "imageHandlingQueue")
+            imageHandlingQueue.async {
+                ImageSetter.download(iconKey: iconKey, handler: handler)
+            }
         }
     }
 
-    // 캐시된 이미지를 요청했을때 캐시데이터가 없으면 nil 리턴
+
     private class func cacheImageData(at imageSavingPath: URL) -> Data? {
         guard FileManager().fileExists(atPath: imageSavingPath.path) else { return nil }
         let existData = try? Data(contentsOf: imageSavingPath)
         return existData
     }
+
 
     private class func download(iconKey: String, handler: @escaping((Data?) -> Void)) {
         let cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
@@ -55,6 +59,15 @@ class ImageSetter {
             }
 
             if let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode, let tempLoation = tempLoation {
+
+                if FileManager.default.fileExists(atPath: imageSavingPath.path) {
+                    do {
+                        try FileManager.default.removeItem(atPath: imageSavingPath.path)
+                    } catch {
+                        print("FAIL TO REMOVE")
+                    }
+                }
+
                 do {
                     try FileManager.default.moveItem(at: tempLoation, to: imageSavingPath)
                     let data = try Data(contentsOf: imageSavingPath)
@@ -63,12 +76,14 @@ class ImageSetter {
                     print("FAIL TO CACHE FILE")
                     handler(nil)
                 }
+
             }
-            LoadingIndicator.stop()
         }.resume()
-
     }
-
 }
+
+
+
+
 
 
