@@ -49,7 +49,7 @@ struct LocationItem: Hashable, Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try? container.encode(latitude, forKey: .latitude)
         try? container.encode(longitude, forKey: .longitude)
-        try? container.encode(latitude, forKey: .latitude)
+        try? container.encode(name, forKey: .name)
         try? container.encode(isTrackedLocation, forKey: .isTrackedLocation)
     }
 
