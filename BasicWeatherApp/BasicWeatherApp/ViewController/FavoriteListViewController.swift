@@ -89,7 +89,20 @@ extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.fetchForecast(at: indexPath.row)
     }
-    
+
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return indexPath.row == 0 ? .none: .delete
+    }
+
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        guard indexPath.row != 0 else { return nil }
+        let delete = UITableViewRowAction(style: .destructive, title: "삭제") { (action, indexPath) in
+            self.cities.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+
+        return [delete]
+    }
 }
 
 extension FavoriteListViewController: FavoriteCityDelegate {
