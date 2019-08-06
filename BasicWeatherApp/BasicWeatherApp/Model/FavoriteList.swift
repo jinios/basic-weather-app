@@ -8,75 +8,45 @@
 
 import Foundation
 
-
-class DataStorage<T: NSCoding> {
-    
-    class func load() -> T? {
-        if UserDefaults.standard.object(forKey: String(describing: T.self)) != nil {
-            guard let encodedData = UserDefaults.standard.data(forKey: String(describing: T.self)) else { return nil }
-            guard let archivedMachine = NSKeyedUnarchiver.unarchiveObject(with: encodedData) as? T else { return nil }
-            return archivedMachine
-        }
-        return nil
-    }
-    
-    class func save(data: T) {
-        UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: data), forKey: String(describing: T.self))
-    }
-}
-
-
-class FavoriteList: NSObject, NSCoding {
+final class FavoriteList {
     
     private static var sharedInstance = FavoriteList()
     
-    private var cities: Set<Int> {
-        didSet {
-            DataStorage<FavoriteList>.save(data: self)
-        }
-    }
+    private var cities: Set<FavoriteCity>
     
     static let shared: FavoriteList = {
         return sharedInstance
     }()
-    
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(cities, forKey: String(describing: FavoriteList.self))
+
+    private init(citySet: Set<FavoriteCity>) {
+        self.cities = citySet
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        cities = aDecoder.decodeObject(forKey: String(describing: FavoriteList.self)) as! Set<Int>
+    private init() {
+        self.cities = Set<FavoriteCity>()
     }
     
-    private override init() {
-        self.cities = Set<Int>()
-    }
-    
-    private init(ids: [Int]) {
+    private init(ids: [FavoriteCity]) {
         self.cities = Set(ids)
     }
-    
-    static func sharedFromDataStorage(_ ids: [Int]) -> FavoriteList {
-        sharedInstance = FavoriteList(ids: ids)
-        return sharedInstance
-    }
-    
-    static func loadSavedData(_ data: FavoriteList) {
+
+    static func load(data: FavoriteList) {
         sharedInstance = data
     }
-    
+
     static func isSameData(_ data: FavoriteList) -> Bool {
         return sharedInstance.cities == data.cities
     }
     
-    func push(id: Int) -> Bool {
-        let isPushed = self.cities.insert(id).inserted
+    func push(_ city: FavoriteCity) -> Bool {
+        let isPushed = self.cities.insert(city).inserted
         return isPushed
     }
     
-    func pop(id: Int) -> Bool {
+    func pop(_ city: FavoriteCity) -> Bool {
         var popResult: Bool
-        let result = self.cities.remove(id)
+        let result = self.cities.remove(city)
+        // TODO: 삼항연산자 사용
         if result != nil {
             popResult = true
         } else {
@@ -84,18 +54,34 @@ class FavoriteList: NSObject, NSCoding {
         }
         return popResult
     }
-    
-    func isFavorite(branchId: Int) -> Bool {
-        guard cities.count > 0 else { return false }
-        return cities.contains(branchId)
+
+    func cityList() -> Set<FavoriteCity> {
+        return self.cities
     }
-    
-    func ids() -> [Int] {
-        return cities.sorted()
-    }
-    
+
     func isEmpty() -> Bool {
         return cities.isEmpty
     }
     
+}
+
+// MARK: Codable
+
+extension FavoriteList: Codable {
+
+    private enum CodingKeys: String, CodingKey {
+        case cities
+    }
+
+    convenience init(from decoder: Decoder) throws {
+        self.init()
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        cities = try container.decode(Set<FavoriteCity>.self, forKey: .cities)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(cities, forKey: .cities)
+    }
+
 }

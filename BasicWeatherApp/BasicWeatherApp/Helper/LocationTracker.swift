@@ -6,7 +6,7 @@
 //  Copyright © 2019 MIJIN JEON. All rights reserved.
 //
 
-import  CoreLocation
+import CoreLocation
 
 protocol LocationTrackingDelegate: class {
     func currentLocation(_ location: LocationItem?)
