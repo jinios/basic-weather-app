@@ -20,6 +20,8 @@ class LocationTracker: NSObject, CLLocationManagerDelegate {
     override init() {
         super.init()
         locationManager = CLLocationManager()
+        locationManager?.delegate = self
+
         locationManager?.requestWhenInUseAuthorization()
     }
 
@@ -29,7 +31,6 @@ class LocationTracker: NSObject, CLLocationManagerDelegate {
         switch authorizationStatus {
         case .authorizedAlways, .authorizedWhenInUse:
             locationManager?.desiredAccuracy = kCLLocationAccuracyKilometer
-            locationManager?.delegate = self
             locationManager?.startUpdatingLocation()
         default: return
         }
@@ -75,16 +76,9 @@ class LocationTracker: NSObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
-        case .notDetermined:
-            print("notDetermined")        // location permission not asked for yet
-        case .authorizedWhenInUse:
-            print("authorizedWhenInUse")  // location authorized
-        case .authorizedAlways:
-            print("authorizedAlways")     // location authorized
-        case .restricted:
-            print("restricted")           // TODO: handle
-        case .denied:
-            print("denied")               // TODO: handle
+        case .authorizedWhenInUse, .authorizedAlways: getLocation()
+        case .notDetermined: locationManager?.requestWhenInUseAuthorization()
+        case .restricted, .denied: print("LOCATION DENIED")
         @unknown default: break
         }
     }

@@ -20,7 +20,7 @@ class FavoriteCityTableViewCell: UITableViewCell, IconPresentable {
             guard let cityData = self.cityData else { return }
             self.cityName.text = cityData.location?.name
             self.currentTemperature.text = cityData.currentWeather?.detailWeather.temperature.text
-            self.currentUserLocationFlagLabel.isHidden = !(self.cityData?.location?.isTrackedLocation ?? false)
+            self.currentUserLocationFlagLabel.isHidden = !(self.cityData?.location?.isUserLocation ?? false)
             self.currentUserLocationFlagLabel.transform = CGAffineTransform(rotationAngle: -45.0)
         }
     }

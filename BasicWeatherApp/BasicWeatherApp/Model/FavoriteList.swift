@@ -11,23 +11,19 @@ import Foundation
 final class FavoriteList {
     
     private static var sharedInstance = FavoriteList()
-    
-    private var cities: Set<FavoriteCity>
-    
+
+    private var cities: [FavoriteCity]
+
     static let shared: FavoriteList = {
         return sharedInstance
     }()
 
-    private init(citySet: Set<FavoriteCity>) {
-        self.cities = citySet
+    private init(cities: [FavoriteCity]) {
+        self.cities = cities
     }
     
     private init() {
-        self.cities = Set<FavoriteCity>()
-    }
-    
-    private init(ids: [FavoriteCity]) {
-        self.cities = Set(ids)
+        self.cities = [FavoriteCity]()
     }
 
     static func load(data: FavoriteList) {
@@ -38,31 +34,32 @@ final class FavoriteList {
         return sharedInstance.cities == data.cities
     }
     
-    func push(_ city: FavoriteCity) -> Bool {
-        let isPushed = self.cities.insert(city).inserted
-        return isPushed
-    }
-    
-    func pop(_ city: FavoriteCity) -> Bool {
-        var popResult: Bool
-        let result = self.cities.remove(city)
-        // TODO: 삼항연산자 사용
-        if result != nil {
-            popResult = true
-        } else {
-            popResult = false
-        }
-        return popResult
+    fileprivate func add(_ city: FavoriteCity) -> Bool {
+        guard !cities.contains(city) else { return false }
+        self.cities.append(city)
+        return true
     }
 
-    func cityList() -> Set<FavoriteCity> {
-        return self.cities
+    fileprivate func remove(at index: Int) {
+        cities.remove(at: index)
     }
 
-    func isEmpty() -> Bool {
+    fileprivate func cityList() -> [FavoriteCity] {
+        return Array(self.cities)
+    }
+
+    fileprivate func isEmpty() -> Bool {
         return cities.isEmpty
     }
-    
+
+    fileprivate func city(at index: Int) -> FavoriteCity {
+        return self.cities[index]
+    }
+
+    fileprivate func count() -> Int {
+        return self.cities.count
+    }
+
 }
 
 // MARK: Codable
@@ -76,7 +73,7 @@ extension FavoriteList: Codable {
     convenience init(from decoder: Decoder) throws {
         self.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        cities = try container.decode(Set<FavoriteCity>.self, forKey: .cities)
+        cities = try container.decode([FavoriteCity].self, forKey: .cities)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -84,4 +81,65 @@ extension FavoriteList: Codable {
         try container.encode(cities, forKey: .cities)
     }
 
+}
+
+class FavoriteCityManager {
+
+    var userLocationCity: FavoriteCity?
+    var presentableDelegate: FavoriteListPresentable?
+
+    var hasUserLocationCity: Bool {
+        guard let userLocationCity = self.userLocationCity else { return false }
+        return userLocationCity.location?.isUserLocation ?? false
+    }
+
+    var count: Int {
+        let totalCount = FavoriteList.shared.count()
+
+        if self.userLocationCity != nil {
+            return totalCount + 1
+        } else {
+            return totalCount
+        }
+    }
+
+    func update(userLocationCity: FavoriteCity) -> Bool {
+        if let previousCity = self.userLocationCity, previousCity == userLocationCity {
+            presentableDelegate?.updateList()
+            return false
+        } else {
+            self.userLocationCity = userLocationCity // 이전 위치와 다르면 새로운 위치 넣어줌
+            presentableDelegate?.updateList()
+            return true
+        }
+
+    }
+
+    func city(at index: Int) -> FavoriteCity? {
+        if let userLocationCity = self.userLocationCity {
+            if index == 0 {
+                return userLocationCity
+            } else {
+                return FavoriteList.shared.city(at: index - 1)
+            }
+        } else {
+            return FavoriteList.shared.city(at: index)
+        }
+    }
+
+    func remove(at index: Int) {
+        let removeIndex = userLocationCity != nil ? index - 1 : index
+        FavoriteList.shared.remove(at: removeIndex)
+        presentableDelegate?.updateList()
+    }
+
+    func add(_ city: FavoriteCity) {
+        guard FavoriteList.shared.add(city) else { return }
+        presentableDelegate?.updateList()
+    }
+
+}
+
+protocol FavoriteListPresentable: class {
+    func updateList()
 }

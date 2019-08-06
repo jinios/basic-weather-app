@@ -11,20 +11,18 @@ import UIKit
 class FavoriteListViewController: UIViewController, IconDownloader {
 
     @IBOutlet weak var tableView: UITableView!
-    private var locationTracker: LocationTracker?
 
-    var cities: [FavoriteCity] = [] {
-        didSet {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
-    }
+    private var locationTracker: LocationTracker?
+    private var favoriteCityManager: FavoriteCityManager?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 100
         self.navigationItem.title = "즐겨찾는 도시"
+
+        favoriteCityManager = FavoriteCityManager()
+        favoriteCityManager?.presentableDelegate = self
+
         locationTracker = LocationTracker()
         locationTracker?.locationTrackingdelegate = self
         locationTracker?.getLocation()
@@ -45,7 +43,9 @@ class FavoriteListViewController: UIViewController, IconDownloader {
     }
 
     func fetchForecast(at index: Int) {
-        DataSetter.fetch(of: self.cities[index]) { forecast, city in
+        guard let selectedCity = favoriteCityManager?.city(at: index) else { return }
+
+        DataSetter.fetch(of: selectedCity) { forecast, city in
             self.pushToDetailWeather(forecast: forecast, city: city)
         }
     }
@@ -66,23 +66,23 @@ extension FavoriteListViewController: LocationTrackingDelegate {
 
     func currentLocation(_ location: LocationItem?) {
         guard let locationItem = location else { return }
-        DataSetter.fetch(of: locationItem) { (favoriteCity) in
-            self.cities.insert(favoriteCity, at: 0) // add weather of current user location at firstIndex
+        DataSetter.fetch(of: locationItem) { [weak self] (favoriteCity) in
+            self?.favoriteCityManager?.update(userLocationCity: favoriteCity)
         }
+
     }
 }
 
-
 extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cities.count
+        return self.favoriteCityManager?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteCityTableViewCell", for: indexPath) as? FavoriteCityTableViewCell else { return UITableViewCell() }
-        cell.cityData = self.cities[indexPath.row]
+        cell.cityData = favoriteCityManager?.city(at: indexPath.row)
         downloadIcon(of: cell, iconKey: cell.cityData?.currentWeather?.weather.first?.icon ?? "")
-
         return cell
     }
 
@@ -91,13 +91,17 @@ extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource
     }
 
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        guard let hasUserLocationCity = favoriteCityManager?.hasUserLocationCity else { return .delete }
+        guard hasUserLocationCity else { return .delete }
+
         return indexPath.row == 0 ? .none: .delete
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         guard indexPath.row != 0 else { return nil }
-        let delete = UITableViewRowAction(style: .destructive, title: "삭제") { (action, indexPath) in
-            self.cities.remove(at: indexPath.row)
+
+        let delete = UITableViewRowAction(style: .destructive, title: "삭제") { [weak self] (action, indexPath) in
+            self?.favoriteCityManager?.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
 
@@ -108,9 +112,17 @@ extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource
 extension FavoriteListViewController: FavoriteCityDelegate {
     
     func addCity(_ city: FavoriteCity) {
-        guard FavoriteList.shared.push(id: city) else { return }
-        self.cities.append(city)
+        favoriteCityManager?.add(city)
     }
 
 }
 
+extension FavoriteListViewController: FavoriteListPresentable {
+
+    func updateList() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+
+}
