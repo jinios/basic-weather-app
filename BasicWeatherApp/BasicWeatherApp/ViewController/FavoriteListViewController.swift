@@ -29,7 +29,14 @@ class FavoriteListViewController: UIViewController, IconDownloader {
         locationTracker?.locationTrackingdelegate = self
         locationTracker?.getLocation()
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let indexPath = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+
     @IBAction func openSearchCity(_ sender: Any) {
         guard let nextVC = self.storyboard?.instantiateViewController(withIdentifier: "CitySearchViewController") as? CitySearchViewController else { return }
         nextVC.favoriteCityDelegate = self

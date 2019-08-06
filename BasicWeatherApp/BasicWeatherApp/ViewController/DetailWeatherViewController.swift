@@ -26,6 +26,7 @@ class DetailWeatherViewController: UIViewController, IconDownloader {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.allowsSelection = false
     }
 }
 
