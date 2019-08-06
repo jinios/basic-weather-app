@@ -46,6 +46,7 @@
 		FD92B65A22F8422B00179F3E /* Rain.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD92B65922F8422B00179F3E /* Rain.swift */; };
 		FD92B65C22F8423700179F3E /* Snow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD92B65B22F8423700179F3E /* Snow.swift */; };
 		FD92B65F22F8624500179F3E /* FavoriteCity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD92B65E22F8624500179F3E /* FavoriteCity.swift */; };
+		FDE18B6522F9753B00DA8BFB /* DetailWeatherInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE18B6422F9753B00DA8BFB /* DetailWeatherInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +103,7 @@
 		FD92B65922F8422B00179F3E /* Rain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rain.swift; sourceTree = "<group>"; };
 		FD92B65B22F8423700179F3E /* Snow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snow.swift; sourceTree = "<group>"; };
 		FD92B65E22F8624500179F3E /* FavoriteCity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCity.swift; sourceTree = "<group>"; };
+		FDE18B6422F9753B00DA8BFB /* DetailWeatherInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailWeatherInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +159,7 @@
 				FD92B64D22F8414100179F3E /* CurrentWeather.swift */,
 				FD92B65122F841A800179F3E /* ForecastWeather.swift */,
 				FD92B65E22F8624500179F3E /* FavoriteCity.swift */,
+				FDE18B6422F9753B00DA8BFB /* DetailWeatherInfo.swift */,
 				93BD120722F30BC7009BD4E6 /* Weather.swift */,
 				936006ED22F3BFF400F21315 /* FavoriteList.swift */,
 				FD92B64922F8410200179F3E /* DetailWeather.swift */,
@@ -355,6 +358,7 @@
 				FD1EF33322F47BD500EFAFA2 /* DataStorage.swift in Sources */,
 				FD7EC0D722F4C47900162F51 /* WeeklyWeatherTableViewCell.swift in Sources */,
 				FD7EC0DD22F4C62800162F51 /* WeeklyWeatherCollectionViewCell.swift in Sources */,
+				FDE18B6522F9753B00DA8BFB /* DetailWeatherInfo.swift in Sources */,
 				FD92B64522F7F43800179F3E /* LocationTracker.swift in Sources */,
 				FD92B64A22F8410200179F3E /* DetailWeather.swift in Sources */,
 				FD92B65622F8420800179F3E /* Wind.swift in Sources */,
