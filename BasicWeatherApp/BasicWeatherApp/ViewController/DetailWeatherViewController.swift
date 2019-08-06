@@ -12,18 +12,11 @@ class DetailWeatherViewController: UIViewController, IconDownloader {
 
     @IBOutlet weak var tableView: UITableView!
 
-    var city: FavoriteCity? {
-        didSet {
-            guard let city = self.city else { return }
-            self.currentDetailList = CurrentDetailList(currentWeather: city.currentWeather!)
-        }
-    }
-
-    var weatherInfo: Forecast?
-    var currentDetailList: CurrentDetailList?
+    var detailWeatherInfo: DetailWeatherInfo?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.title = self.detailWeatherInfo?.cityName
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.allowsSelection = false
     }
@@ -46,7 +39,7 @@ extension DetailWeatherViewController: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherSummaryTableViewCell", for: indexPath) as! WeatherSummaryTableViewCell
-            cell.summary = self.city
+            cell.summary = self.detailWeatherInfo?.city
             downloadIcon(of: cell, iconKey: cell.summary?.currentWeather?.weather.first?.icon ?? "")
             return cell
 
@@ -79,8 +72,11 @@ extension DetailWeatherViewController: UITableViewDelegate {
         switch indexPath.section {
         case 0: return 230
         case 1: return 130
-        case 2: return CGFloat(50 * (self.weatherInfo?.weeklyForecast().count ?? 0))
-        case 3: return CGFloat(60 * ((self.currentDetailList?.count)! / 2))
+        case 2:
+            return CGFloat(50 * (self.detailWeatherInfo?.weeklyForecastCount ?? 0))
+        case 3:
+            let numberOfLine: CGFloat = CGFloat(self.detailWeatherInfo?.miscellaneousListCount ?? 0) / CGFloat(2)
+            return CGFloat(60 * numberOfLine.rounded())
         default: return 400
         }
     }
@@ -92,11 +88,11 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView.tag {
         case 1:
-            return self.weatherInfo?.hourlyForecast().count ?? 0
+            return self.detailWeatherInfo?.hourlyForecastCount ?? 0
         case 2:
-            return self.weatherInfo?.weeklyForecast().count ?? 0
+            return self.detailWeatherInfo?.weeklyForecastCount ?? 0
         case 3:
-            return self.currentDetailList?.count ?? 0
+            return self.detailWeatherInfo?.miscellaneousListCount ?? 0
         default: return 0
         }
     }
@@ -107,18 +103,18 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
         switch collectionView.tag {
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyWeatherCollectionViewCell", for: indexPath) as! HourlyWeatherCollectionViewCell
-            cell.forecast = self.weatherInfo?.hourlyForecast()[indexPath.row]
+            cell.forecast = detailWeatherInfo?.hourlyForecast(at: indexPath.row)
             downloadIcon(of: cell, iconKey: cell.forecast?.weather.first?.icon ?? "")
             return cell
 
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeeklyWeatherCollectionViewCell", for: indexPath) as! WeeklyWeatherCollectionViewCell
-            cell.forecast = self.weatherInfo?.weeklyForecast()[indexPath.row]
+            cell.forecast = detailWeatherInfo?.weeklyForecast(at: indexPath.row)
             downloadIcon(of: cell, iconKey: cell.forecast?.weather.first?.icon ?? "")
             return cell
 
         case 3: let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: "CurrentDetailCollectionViewCell", for: indexPath) as! CurrentDetailCollectionViewCell
-            cell.detailInfo = self.currentDetailList?.miscellaneousDetail(at: indexPath.row)
+            cell.detailInfo = detailWeatherInfo?.miscellaneousDetail(at: indexPath.row)
             return cell
             
         default: return UICollectionViewCell()

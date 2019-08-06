@@ -25,35 +25,3 @@ class CurrentDetailCollectionViewCell: UICollectionViewCell {
     }
 
 }
-
-struct CurrentDetailList {
-
-    private let currentWeather: CurrentWeather
-    private var miscellaneousWeatherList: [MiscellaneousDetailWeather] = []
-
-    var count: Int {
-        return miscellaneousWeatherList.count
-    }
-
-    init(currentWeather: CurrentWeather) {
-        self.currentWeather = currentWeather
-        makeMiscellaneousWeatherList()
-    }
-
-    private mutating func makeMiscellaneousWeatherList() {
-        let details: [MiscellaneousDetailWeather?] =
-            [currentWeather.clouds,
-             currentWeather.detailWeather.humidity,
-             currentWeather.rain,
-             currentWeather.snow,
-             currentWeather.wind,
-             currentWeather.detailWeather.pressure]
-
-        miscellaneousWeatherList = details.compactMap { $0 }
-    }
-
-    func miscellaneousDetail(at index: Int) -> MiscellaneousDetailWeather {
-        return miscellaneousWeatherList[index]
-    }
-
-}

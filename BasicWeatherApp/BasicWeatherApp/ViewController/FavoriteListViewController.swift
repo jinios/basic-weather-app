@@ -52,8 +52,8 @@ class FavoriteListViewController: UIViewController, IconDownloader {
 
     func pushToDetailWeather(forecast: Forecast, city: FavoriteCity) {
         guard let detailWeatherVC = self.storyboard?.instantiateViewController(withIdentifier: "DetailWeatherViewController") as? DetailWeatherViewController else { return }
-        detailWeatherVC.city = city
-        detailWeatherVC.weatherInfo = forecast
+        let detailWeather = DetailWeatherInfo(city: city, forecast: forecast)
+        detailWeatherVC.detailWeatherInfo = detailWeather
 
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(detailWeatherVC, animated: true)
