@@ -13,7 +13,6 @@ class ImageSetter {
     class func fetch(iconKey: String, handler: @escaping ((Data?) -> Void)) {
         let cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
         let imageSavingPath = cacheURL.appendingPathComponent(iconKey)
-        print("PATH: \(imageSavingPath)")
 
         if let imageData = cacheImageData(at: imageSavingPath) {
             handler(imageData)
@@ -49,38 +48,39 @@ class ImageSetter {
         configure.timeoutIntervalForRequest = 15
         let urlSession = URLSession(configuration: configure)
 
-        LoadingIndicator.start()
 
         urlSession.downloadTask(with: sessionUrl) {(tempLoation, response, error) in
 
             if let error = error {
-                print("FAIL TO DOWNLOAD ERROR: \(error)")
                 handler(nil)
             }
 
             if let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode, let tempLoation = tempLoation {
-
-                if FileManager.default.fileExists(atPath: imageSavingPath.path) {
-                    do {
-                        try FileManager.default.removeItem(atPath: imageSavingPath.path)
-                    } catch {
-                        print("FAIL TO REMOVE")
-                    }
-                }
-
-                do {
-                    try FileManager.default.moveItem(at: tempLoation, to: imageSavingPath)
-                    let data = try Data(contentsOf: imageSavingPath)
-                    handler(data)
-                } catch {
-                    print("FAIL TO CACHE FILE")
-                    handler(nil)
-                }
-
+                ImageSetter.moveItem(fromPath: tempLoation, destinationPath: imageSavingPath, handler: handler)
             }
         }.resume()
     }
+
+
+    private class func moveItem(fromPath: URL, destinationPath: URL, handler: @escaping((Data?) -> Void)) {
+        if FileManager.default.fileExists(atPath: destinationPath.path) {
+            do {
+                try FileManager.default.removeItem(atPath: destinationPath.path)
+            } catch {
+                handler(nil)
+            }
+        }
+        do {
+            try FileManager.default.moveItem(at: fromPath, to: destinationPath)
+            let data = try Data(contentsOf: destinationPath)
+            handler(data)
+        } catch {
+            handler(nil)
+        }
+    }
+
 }
+
 
 
 

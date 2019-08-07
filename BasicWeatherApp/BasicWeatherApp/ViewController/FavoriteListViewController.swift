@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ErrorAlertPresentable: UIViewController {
+    func sendErrorAlert()
+}
+
 class FavoriteListViewController: UIViewController, IconDownloader {
 
     @IBOutlet weak var tableView: UITableView!
@@ -49,8 +53,15 @@ class FavoriteListViewController: UIViewController, IconDownloader {
                           parameters: QueryItemMaker.weatherAPIquery(city: selectedCity.location),
                           pathComponent: RequestType.forecastWeather)
 
-        DataSetter.fetch(of: selectedCity, url: url) { (forecast, city) in
-            self.pushToDetailWeather(forecast: forecast, city: city)
+        DataSetter.fetch(of: selectedCity, url: url) { [weak self] (forecast, city, error) in
+            if let error = error {
+                SlackWebhook.fire(message: error.body())
+                self?.sendErrorAlert()
+            }
+
+            guard let forecast = forecast else { return }
+            guard let city = city else { return }
+            self?.pushToDetailWeather(forecast: forecast, city: city)
         }
     }
 
@@ -75,7 +86,14 @@ extension FavoriteListViewController: LocationTrackingDelegate {
                           parameters: QueryItemMaker.weatherAPIquery(city: locationItem),
                           pathComponent: RequestType.currentWeather)
 
-        DataSetter.fetch(of: locationItem, url: url) { [weak self] (favoriteCity) in
+        DataSetter.fetch(of: locationItem, url: url) { [weak self] (favoriteCity, error) in
+
+            if let error = error {
+                SlackWebhook.fire(message: error.body())
+                self?.sendErrorAlert()
+            }
+
+            guard let favoriteCity = favoriteCity else { return }
             self?.favoriteCityManager?.update(userLocationCity: favoriteCity)
         }
 
@@ -131,6 +149,18 @@ extension FavoriteListViewController: FavoriteListPresentable {
     func updateList() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
+        }
+    }
+
+}
+
+extension FavoriteListViewController: ErrorAlertPresentable {
+
+    func sendErrorAlert() {
+        DispatchQueue.main.async {
+            let alert = UIAlertController.make()
+            alert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
 

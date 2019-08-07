@@ -48,7 +48,7 @@ class CitySearchViewController: UIViewController {
     @IBAction func closeCitySearch(_ sender: Any) {
         dismiss()
     }
-    
+
     
 }
 
@@ -130,7 +130,12 @@ extension CitySearchViewController: UITableViewDelegate {
                               parameters: QueryItemMaker.weatherAPIquery(city: locationItem),
                               pathComponent: RequestType.currentWeather)
 
-            DataSetter.fetch(of: locationItem, url: url) { [weak self] (favoriteCity) in
+            DataSetter.fetch(of: locationItem, url: url) { [weak self] (favoriteCity, error) in
+                if let error = error {
+                    SlackWebhook.fire(message: error.body())
+                    self?.sendErrorAlert()
+                }
+                guard let favoriteCity = favoriteCity else { return }
                 self?.addFavoriteCity(favoriteCity)
             }
         }
@@ -153,5 +158,15 @@ extension CitySearchViewController: UIScrollViewDelegate {
 }
 
 
+extension CitySearchViewController: ErrorAlertPresentable {
+
+    func sendErrorAlert() {
+        DispatchQueue.main.async {
+            let alert = UIAlertController.make()
+            alert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+}
 
 

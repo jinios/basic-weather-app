@@ -31,4 +31,11 @@ class BasicWeatherAppTests: XCTestCase {
         }
     }
 
+    func test_isPast() {
+        let timeNow = Date()
+        let timeCompare = "2019-07-31 00:00:00".convertDate
+        let result = timeCompare?.isFuture(from: timeNow)
+        XCTAssertFalse(result!)
+    }
+
 }

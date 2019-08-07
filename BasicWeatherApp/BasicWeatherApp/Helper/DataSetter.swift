@@ -47,14 +47,11 @@ class API {
         return urlComponents?.url
     }
 
-
 }
 
-
-// class DataSetter<T: LocationItemProtocol, U: RequestForecastType,
 class DataSetter {
 
-    class func fetch(of city: LocationItem, url: URL?, timeout: TimeInterval = 15, handler: @escaping((FavoriteCity) -> Void)) {
+    class func fetch(of city: LocationItem, url: URL?, timeout: TimeInterval = 15, handler: @escaping((FavoriteCity?, APIErrorMessage?) -> Void)) {
 
         let configure = URLSessionConfiguration.default
         configure.timeoutIntervalForRequest = timeout
@@ -64,7 +61,11 @@ class DataSetter {
         urlSession.dataTask(with: url!) {(data, response, err) in
 
             if let error = err {
-
+                let errorMessage = APIErrorMessage(brokenUrl: url,
+                                                   data: data,
+                                                   type: .Network,
+                                                   error: error)
+                handler(nil, errorMessage)
             }
 
             if let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode, let data = data {
@@ -73,16 +74,27 @@ class DataSetter {
                     print(data.prettyPrintedJSONString!)
                     let currentWeather = try JSONDecoder().decode(CurrentWeather.self, from: data)
                     let city = FavoriteCity(location: city, currentWeather: currentWeather)
-                    handler(city)
+
+                    handler(city, nil)
                 } catch {
-                    print("FAIL TO DECODE")
+                    let errorMessage = APIErrorMessage(brokenUrl: url,
+                                                       data: data,
+                                                       type: .Parsing,
+                                                       error: nil)
+                    handler(nil, errorMessage)
                 }
+            } else {
+                let errorMessage = APIErrorMessage(brokenUrl: url,
+                                                   data: data,
+                                                   type: .Parsing,
+                                                   error: nil)
+                handler(nil, errorMessage)
             }
             }.resume()
     }
 
 
-    class func fetch(of city: FavoriteCity, url: URL?, timeout: TimeInterval = 15, handler: @escaping((Forecast, FavoriteCity) -> Void)) {
+    class func fetch(of city: FavoriteCity, url: URL?, timeout: TimeInterval = 15, handler: @escaping((Forecast?, FavoriteCity?, APIErrorMessage?) -> Void)) {
 
         let configure = URLSessionConfiguration.default
         configure.timeoutIntervalForRequest = timeout
@@ -91,18 +103,37 @@ class DataSetter {
         urlSession.dataTask(with: url!) {(data, response, err) in
 
             if let error = err {
-
+                let errorMessage = APIErrorMessage(brokenUrl: url,
+                                                   data: data,
+                                                   type: .Network,
+                                                   error: error)
+                handler(nil, nil, errorMessage)
             }
 
             if let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode, let data = data {
                 do {
                     print(data.prettyPrintedJSONString!)
                     let currentWeather = try JSONDecoder().decode(Forecast.self, from: data)
-                    handler(currentWeather, city)
+
+                    handler(currentWeather, city, nil)
                 } catch {
-                    print("FAIL TO DECODE")
+                    let errorMessage = APIErrorMessage(brokenUrl: url,
+                                                       data: data,
+                                                       type: .Parsing,
+                                                       error: nil)
+
+                    handler(nil, nil, errorMessage)
                 }
+            } else {
+                let errorMessage = APIErrorMessage(brokenUrl: url,
+                                                   data: data,
+                                                   type: .Parsing,
+                                                   error: nil)
+
+                handler(nil, nil, errorMessage)
             }
+
+
         }.resume()
 
     }
