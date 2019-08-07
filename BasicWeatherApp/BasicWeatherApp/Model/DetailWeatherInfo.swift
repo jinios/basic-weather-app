@@ -12,10 +12,14 @@ struct DetailWeatherInfo {
     private(set) var city: FavoriteCity
     private(set) var forecast: Forecast
     private(set) var miscellaneousWeatherList: [MiscellaneousDetailWeather] = []
+    private(set) var weeklyForecast: [WeekdayForecast]
 
     init(city: FavoriteCity, forecast: Forecast) {
         self.city = city
         self.forecast = forecast
+        self.weeklyForecast = self.forecast.weeklyForecast().sorted {
+            $0.dateOfWeek.toDate() ?? Date() < $1.dateOfWeek.toDate() ?? Date()
+        }
         makeMiscellaneousWeatherList()
     }
 
@@ -28,7 +32,7 @@ struct DetailWeatherInfo {
     }
 
     var weeklyForecastCount: Int {
-        return forecast.weeklyForecast().count
+        return weeklyForecast.count
     }
 
     var hourlyForecastCount: Int {
@@ -55,8 +59,11 @@ struct DetailWeatherInfo {
         return forecast.hourlyForecast()[index]
     }
 
-    func weeklyForecast(at index: Int) -> ForecastWeather? {
-        return forecast.weeklyForecast()[index]
+    func weeklyForecast(at index: Int) -> WeekdayForecast? {
+        return weeklyForecast[index]
     }
+
+    
+
 }
 

@@ -18,7 +18,7 @@ class WeatherSummaryTableViewCell: UITableViewCell, IconPresentable {
     @IBOutlet weak var sunsetTimeLabel: UILabel!
 
     var summary: FavoriteCity? {
-        didSet { self.set()}
+        didSet { self.set() }
     }
 
     override func awakeFromNib() {
@@ -33,8 +33,8 @@ class WeatherSummaryTableViewCell: UITableViewCell, IconPresentable {
 
         let sunriseDate = Date(timeIntervalSince1970: summary.currentWeather?.system?.sunrise ?? 0)
         let sunsetDate = Date(timeIntervalSince1970: summary.currentWeather?.system?.sunset ?? 0)
-        self.sunriseTimeLabel.text = "↑ \(sunriseDate.convertAMPMHHMM())"
-        self.sunsetTimeLabel.text = "↓ \(sunsetDate.convertAMPMHHMM())"
+        self.sunriseTimeLabel.text = "↑ \(sunriseDate.convertAMPMHHMM(includeMinute: true))"
+        self.sunsetTimeLabel.text = "↓ \(sunsetDate.convertAMPMHHMM(includeMinute: true))"
     }
 
 

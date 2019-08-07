@@ -45,6 +45,10 @@ extension Date {
 
         let difference = self.timeIntervalSinceNow - target.timeIntervalSinceNow
 
+        if (difference > 0) == isTargetPast {
+            // true
+        }
+
         let compare = differenceTimeInterval > difference
 
         return false
@@ -106,6 +110,11 @@ extension Date {
         return isShort ? result : "\(result)요일"
     }
 
+    func dayOfWeek() -> Int {
+        let weekDay = self.convertToString(format: "e")
+        return Int(weekDay) ?? 0
+    }
+
     func toString(formatter: String = "yyyy-MM-dd HH:mm:ss") -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = formatter
@@ -139,5 +148,16 @@ extension String {
             return date
         }
     }
+
+    func toDate(format: String = "yyyy-MM-dd") -> Date? {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.timeZone = TimeZone.init(abbreviation: "KST")
+        formatter.dateFormat = format
+
+
+        guard let date = formatter.date(from: self) else { return nil }
+        return date
+    }
+
 
 }

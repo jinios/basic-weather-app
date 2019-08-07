@@ -14,7 +14,7 @@ class WeeklyWeatherCollectionViewCell: UICollectionViewCell, IconPresentable{
     @IBOutlet weak var maxTemperatureLabel: UILabel!
     @IBOutlet weak var minTemperatureLabel: UILabel!
 
-    var forecast: ForecastWeather? {
+    var forecast: WeekdayForecast? {
         didSet {
             self.set()
         }
@@ -22,9 +22,9 @@ class WeeklyWeatherCollectionViewCell: UICollectionViewCell, IconPresentable{
 
     func set() {
         guard let forecast = self.forecast else { return }
-        weekdayLabel.text = forecast.dateText?.convertDate?.dayOfWeek()
-        maxTemperatureLabel.text = forecast.detailWeather.maxTemperature.text
-        minTemperatureLabel.text = forecast.detailWeather.minTemperature.text
+        weekdayLabel.text = forecast.dateOfWeek.toDate()?.dayOfWeek() ?? ""
+        maxTemperatureLabel.text = forecast.maxTemperature.text
+        minTemperatureLabel.text = forecast.minTemperature.text
     }
 
 }

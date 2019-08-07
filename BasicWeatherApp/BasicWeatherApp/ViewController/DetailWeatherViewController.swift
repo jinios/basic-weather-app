@@ -110,7 +110,7 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeeklyWeatherCollectionViewCell", for: indexPath) as! WeeklyWeatherCollectionViewCell
             cell.forecast = detailWeatherInfo?.weeklyForecast(at: indexPath.row)
-            downloadIcon(of: cell, iconKey: cell.forecast?.weather.first?.icon ?? "")
+            downloadIcon(of: cell, iconKey: cell.forecast?.iconName ?? "")
             return cell
 
         case 3: let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: "CurrentDetailCollectionViewCell", for: indexPath) as! CurrentDetailCollectionViewCell
