@@ -30,7 +30,6 @@ class DataSetter {
             if let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode, let data = data {
 
                 do {
-                    print(data.prettyPrintedJSONString!)
                     let currentWeather = try JSONDecoder().decode(CurrentWeather.self, from: data)
                     let city = FavoriteCity(location: city, currentWeather: currentWeather)
 
@@ -71,7 +70,6 @@ class DataSetter {
 
             if let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode, let data = data {
                 do {
-                    print(data.prettyPrintedJSONString!)
                     let currentWeather = try JSONDecoder().decode(Forecast.self, from: data)
 
                     handler(currentWeather, city, nil)

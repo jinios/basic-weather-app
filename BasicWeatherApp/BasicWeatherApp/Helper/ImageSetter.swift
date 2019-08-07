@@ -17,10 +17,7 @@ class ImageSetter {
         if let imageData = cacheImageData(at: imageSavingPath) {
             handler(imageData)
         } else {
-            let imageHandlingQueue = DispatchQueue(label: "imageHandlingQueue")
-            imageHandlingQueue.async {
-                ImageSetter.download(iconKey: iconKey, handler: handler)
-            }
+            ImageSetter.download(iconKey: iconKey, handler: handler)
         }
     }
 
