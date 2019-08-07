@@ -219,9 +219,9 @@
 		93CAC56322F2C62E00A4EBE4 /* BasicWeatherApp */ = {
 			isa = PBXGroup;
 			children = (
-				FD92B64822F8147E00179F3E /* Protocol */,
 				936006EF22F3F69D00F21315 /* ViewController */,
 				936006F022F3F6C900F21315 /* TableViewCell */,
+				FD92B64822F8147E00179F3E /* Protocol */,
 				936006F122F3F6F400F21315 /* Model */,
 				936006F222F3F71F00F21315 /* Helper */,
 				93CAC56422F2C62E00A4EBE4 /* AppDelegate.swift */,
