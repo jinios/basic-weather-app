@@ -27,7 +27,9 @@ final class FavoriteList {
     }
 
     static func load(data: FavoriteList) {
-        sharedInstance = data
+        if !isSameData(data) {
+            sharedInstance = data
+        }
     }
 
     static func isSameData(_ data: FavoriteList) -> Bool {
@@ -45,7 +47,7 @@ final class FavoriteList {
     }
 
     fileprivate func cityList() -> [FavoriteCity] {
-        return Array(self.cities)
+        return self.cities
     }
 
     fileprivate func isEmpty() -> Bool {
