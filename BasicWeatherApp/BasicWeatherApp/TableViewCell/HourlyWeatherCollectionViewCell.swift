@@ -10,16 +10,15 @@ import UIKit
 
 class HourlyWeatherCollectionViewCell: UICollectionViewCell, IconPresentable {
 
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var weatherIconImageView: UIImageView!
+    @IBOutlet weak var temperatureLabel: UILabel!
+
     var forecast: ForecastWeather? {
         didSet {
             self.set()
         }
     }
-
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var weatherIconImageView: UIImageView!
-    @IBOutlet weak var temperatureLabel: UILabel!
-
     func set() {
         guard let forecast = self.forecast else { return }
         self.timeLabel.text = "\(forecast.dateText!.convertDate!.convertAMPMHHMM(includeMinute: false))시"

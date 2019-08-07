@@ -9,6 +9,7 @@
 import UIKit
 
 class CurrentDetailCollectionViewCell: UICollectionViewCell {
+
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var infoLabel: UILabel!
 

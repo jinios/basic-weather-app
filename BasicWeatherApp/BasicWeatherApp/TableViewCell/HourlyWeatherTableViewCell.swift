@@ -14,7 +14,6 @@ class HourlyWeatherTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     func setDataSource(dataSource: UICollectionViewDataSource, at index: Int) {

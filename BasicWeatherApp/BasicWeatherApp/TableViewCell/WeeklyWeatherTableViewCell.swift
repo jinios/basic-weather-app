@@ -14,7 +14,6 @@ class WeeklyWeatherTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     func setDataSource(dataSource: UICollectionViewDataSource, at row: Int) {

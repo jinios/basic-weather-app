@@ -8,47 +8,6 @@
 
 import Foundation
 
-struct QueryItemMaker {
-
-    static func weatherAPIquery(city: LocationItem?) -> [String:String] {
-        guard let lat = city?.latitude else { return [:] }
-        guard let lng = city?.longitude else { return [:] }
-        guard let appId = KeyInfoLoader.loadValue(of: .APIKey) else { return [:] }
-
-        return [
-            QueryItemKey.latitude.rawValue: String(lat),
-            QueryItemKey.longitude.rawValue: String(lng),
-            QueryItemKey.units.rawValue: "metric",
-            QueryItemKey.language.rawValue: "kr",
-            QueryItemKey.appid.rawValue: appId
-        ]
-    }
-
-}
-
-enum RequestType: String {
-    case currentWeather = "weather"
-    case forecastWeather = "forecast"
-}
-
-class API {
-
-    class func url(baseURL: String?, parameters: [String:String], pathComponent: RequestType?) -> URL? {
-        guard let baseURL = baseURL else { return nil }
-        guard var base = URL(string: baseURL) else { return nil }
-
-        if let path = pathComponent?.rawValue {
-            base.appendPathComponent(path)
-        }
-
-        var urlComponents = URLComponents(url: base, resolvingAgainstBaseURL: true)
-        urlComponents?.queryItems = parameters.map { return URLQueryItem(name: $0.key, value: $0.value) }
-
-        return urlComponents?.url
-    }
-
-}
-
 class DataSetter {
 
     class func fetch(of city: LocationItem, url: URL?, timeout: TimeInterval = 15, handler: @escaping((FavoriteCity?, APIErrorMessage?) -> Void)) {

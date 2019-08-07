@@ -142,6 +142,3 @@ class FavoriteCityManager {
 
 }
 
-protocol FavoriteListPresentable: class {
-    func updateList()
-}

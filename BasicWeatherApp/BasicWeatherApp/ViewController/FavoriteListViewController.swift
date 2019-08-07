@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol ErrorAlertPresentable: UIViewController {
-    func sendErrorAlert()
-}
-
 class FavoriteListViewController: UIViewController, IconDownloader {
 
     @IBOutlet weak var tableView: UITableView!
