@@ -125,7 +125,14 @@ extension CitySearchViewController: UITableViewDelegate {
             let lng = mapItem.placemark.coordinate.longitude
             
             let locationItem = LocationItem(latitude: lat, longitude: lng, name: name)
-            DataSetter.fetch(of: locationItem, handler: self.addFavoriteCity(_:) )
+
+            let url = API.url(baseURL: KeyInfoLoader.loadValue(of: .WeatherBaseURL),
+                              parameters: QueryItemMaker.weatherAPIquery(city: locationItem),
+                              pathComponent: RequestType.currentWeather)
+
+            DataSetter.fetch(of: locationItem, url: url) { [weak self] (favoriteCity) in
+                self?.addFavoriteCity(favoriteCity)
+            }
         }
         
     }

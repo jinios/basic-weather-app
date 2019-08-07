@@ -45,7 +45,11 @@ class FavoriteListViewController: UIViewController, IconDownloader {
     func fetchForecast(at index: Int) {
         guard let selectedCity = favoriteCityManager?.city(at: index) else { return }
 
-        DataSetter.fetch(of: selectedCity) { forecast, city in
+        let url = API.url(baseURL: KeyInfoLoader.loadValue(of: .WeatherBaseURL),
+                          parameters: QueryItemMaker.weatherAPIquery(city: selectedCity.location),
+                          pathComponent: RequestType.forecastWeather)
+
+        DataSetter.fetch(of: selectedCity, url: url) { (forecast, city) in
             self.pushToDetailWeather(forecast: forecast, city: city)
         }
     }
@@ -66,7 +70,12 @@ extension FavoriteListViewController: LocationTrackingDelegate {
 
     func currentLocation(_ location: LocationItem?) {
         guard let locationItem = location else { return }
-        DataSetter.fetch(of: locationItem) { [weak self] (favoriteCity) in
+
+        let url = API.url(baseURL: KeyInfoLoader.loadValue(of: .WeatherBaseURL),
+                          parameters: QueryItemMaker.weatherAPIquery(city: locationItem),
+                          pathComponent: RequestType.currentWeather)
+
+        DataSetter.fetch(of: locationItem, url: url) { [weak self] (favoriteCity) in
             self?.favoriteCityManager?.update(userLocationCity: favoriteCity)
         }
 

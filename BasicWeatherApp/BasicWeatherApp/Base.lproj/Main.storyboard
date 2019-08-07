@@ -314,13 +314,13 @@
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IA8-5N-JlG">
-                                                                        <rect key="frame" x="23" y="14.5" width="42" height="21"/>
+                                                                        <rect key="frame" x="35" y="14.5" width="42" height="21"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3KU-oM-Dh2">
-                                                                        <rect key="frame" x="348" y="14.5" width="42" height="21"/>
+                                                                        <rect key="frame" x="336" y="14.5" width="42" height="21"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
@@ -333,7 +333,7 @@
                                                                         </constraints>
                                                                     </imageView>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fsq-TF-7ig">
-                                                                        <rect key="frame" x="296" y="14.5" width="42" height="21"/>
+                                                                        <rect key="frame" x="284" y="14.5" width="42" height="21"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
@@ -345,11 +345,11 @@
                                                                 <constraint firstItem="IA8-5N-JlG" firstAttribute="centerY" secondItem="uKN-Mh-FL8" secondAttribute="centerY" id="JyV-XB-zIG"/>
                                                                 <constraint firstItem="3KU-oM-Dh2" firstAttribute="centerY" secondItem="uKN-Mh-FL8" secondAttribute="centerY" id="QRd-bJ-gs4"/>
                                                                 <constraint firstItem="Fsq-TF-7ig" firstAttribute="centerY" secondItem="uKN-Mh-FL8" secondAttribute="centerY" id="R3M-EW-Wg6"/>
-                                                                <constraint firstAttribute="trailing" secondItem="3KU-oM-Dh2" secondAttribute="trailing" constant="23" id="W7m-1h-YSL"/>
+                                                                <constraint firstAttribute="trailingMargin" secondItem="3KU-oM-Dh2" secondAttribute="trailing" constant="15" id="W7m-1h-YSL"/>
                                                                 <constraint firstItem="cUs-4a-kfx" firstAttribute="centerX" secondItem="uKN-Mh-FL8" secondAttribute="centerX" id="agL-er-XvL"/>
                                                                 <constraint firstItem="cUs-4a-kfx" firstAttribute="centerY" secondItem="uKN-Mh-FL8" secondAttribute="centerY" id="bZx-tC-tfB"/>
                                                                 <constraint firstItem="3KU-oM-Dh2" firstAttribute="leading" secondItem="Fsq-TF-7ig" secondAttribute="trailing" constant="10" id="ooe-bz-mVT"/>
-                                                                <constraint firstItem="IA8-5N-JlG" firstAttribute="leading" secondItem="uKN-Mh-FL8" secondAttribute="leading" constant="23" id="puv-Fe-jVm"/>
+                                                                <constraint firstItem="IA8-5N-JlG" firstAttribute="leading" secondItem="uKN-Mh-FL8" secondAttribute="leadingMargin" constant="15" id="puv-Fe-jVm"/>
                                                             </constraints>
                                                             <size key="customSize" width="413" height="50"/>
                                                             <connections>

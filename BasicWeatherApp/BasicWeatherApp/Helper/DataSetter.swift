@@ -8,35 +8,67 @@
 
 import Foundation
 
+struct QueryItemMaker {
+
+    static func weatherAPIquery(city: LocationItem?) -> [String:String] {
+        guard let lat = city?.latitude else { return [:] }
+        guard let lng = city?.longitude else { return [:] }
+        guard let appId = KeyInfoLoader.loadValue(of: .APIKey) else { return [:] }
+
+        return [
+            QueryItemKey.latitude.rawValue: String(lat),
+            QueryItemKey.longitude.rawValue: String(lng),
+            QueryItemKey.units.rawValue: "metric",
+            QueryItemKey.language.rawValue: "kr",
+            QueryItemKey.appid.rawValue: appId
+        ]
+    }
+
+}
+
+enum RequestType: String {
+    case currentWeather = "weather"
+    case forecastWeather = "forecast"
+}
+
+class API {
+
+    class func url(baseURL: String?, parameters: [String:String], pathComponent: RequestType?) -> URL? {
+        guard let baseURL = baseURL else { return nil }
+        guard var base = URL(string: baseURL) else { return nil }
+
+        if let path = pathComponent?.rawValue {
+            base.appendPathComponent(path)
+        }
+
+        var urlComponents = URLComponents(url: base, resolvingAgainstBaseURL: true)
+        urlComponents?.queryItems = parameters.map { return URLQueryItem(name: $0.key, value: $0.value) }
+
+        return urlComponents?.url
+    }
+
+
+}
+
+
 // class DataSetter<T: LocationItemProtocol, U: RequestForecastType,
 class DataSetter {
-    
-    class func fetch(of city: LocationItem, handler: @escaping((FavoriteCity) -> Void)) {
-        guard let lat = city.latitude else { return }
-        guard let lng = city.longitude else { return }
-        guard let baseUrl = KeyInfoLoader.loadValue(of: .WeatherBaseURL) else { return }
-        guard let appId = KeyInfoLoader.loadValue(of: .APIKey) else { return }
-        
-        var base = URL(string: baseUrl)
-        base?.appendPathComponent("weather")
-        
-        var urlComponents = URLComponents(url: base!, resolvingAgainstBaseURL: true)
-        
-        urlComponents?.queryItems = [
-            URLQueryItem(name: QueryItemKey.latitude.rawValue, value: String(lat)),
-            URLQueryItem(name: QueryItemKey.longitude.rawValue, value: String(lng)),
-            URLQueryItem(name: QueryItemKey.units.rawValue, value: "metric"),
-            URLQueryItem(name: QueryItemKey.units.rawValue, value: "kr"),
-            URLQueryItem(name: QueryItemKey.appid.rawValue, value: appId)
-        ]
-        
-        guard let sessionUrl = urlComponents?.url else { return }
+
+    class func fetch(of city: LocationItem, url: URL?, timeout: TimeInterval = 15, handler: @escaping((FavoriteCity) -> Void)) {
+
         let configure = URLSessionConfiguration.default
-        configure.timeoutIntervalForRequest = 15
+        configure.timeoutIntervalForRequest = timeout
+
         let urlSession = URLSession(configuration: configure)
-        
-        urlSession.dataTask(with: sessionUrl) {(data, response, err) in
+
+        urlSession.dataTask(with: url!) {(data, response, err) in
+
+            if let error = err {
+
+            }
+
             if let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode, let data = data {
+
                 do {
                     print(data.prettyPrintedJSONString!)
                     let currentWeather = try JSONDecoder().decode(CurrentWeather.self, from: data)
@@ -49,33 +81,19 @@ class DataSetter {
             }.resume()
     }
 
-    class func fetch(of city: FavoriteCity, handler: @escaping((Forecast, FavoriteCity) -> Void)) {
-        guard let lat = city.location?.latitude else { return }
-        guard let lng = city.location?.longitude else { return }
-        guard let baseUrl = KeyInfoLoader.loadValue(of: .WeatherBaseURL) else { return }
-        guard let appId = KeyInfoLoader.loadValue(of: .APIKey) else { return }
 
-        // 파라미터 전달로 수정
-        var base = URL(string: baseUrl)
-        base?.appendPathComponent("forecast") // pathComponent enum으로 수정
+    class func fetch(of city: FavoriteCity, url: URL?, timeout: TimeInterval = 15, handler: @escaping((Forecast, FavoriteCity) -> Void)) {
 
-        var urlComponents = URLComponents(url: base!, resolvingAgainstBaseURL: true)
-
-        // 파라미터 전달로 수정
-        urlComponents?.queryItems = [
-            URLQueryItem(name: QueryItemKey.latitude.rawValue, value: String(lat)),
-            URLQueryItem(name: QueryItemKey.longitude.rawValue, value: String(lng)),
-            URLQueryItem(name: QueryItemKey.units.rawValue, value: "metric"),
-            URLQueryItem(name: QueryItemKey.units.rawValue, value: "kr"),
-            URLQueryItem(name: QueryItemKey.appid.rawValue, value: appId)
-        ]
-
-        guard let sessionUrl = urlComponents?.url else { return }
         let configure = URLSessionConfiguration.default
-        configure.timeoutIntervalForRequest = 15
+        configure.timeoutIntervalForRequest = timeout
         let urlSession = URLSession(configuration: configure)
 
-        urlSession.dataTask(with: sessionUrl) {(data, response, err) in
+        urlSession.dataTask(with: url!) {(data, response, err) in
+
+            if let error = err {
+
+            }
+
             if let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode, let data = data {
                 do {
                     print(data.prettyPrintedJSONString!)
@@ -85,7 +103,7 @@ class DataSetter {
                     print("FAIL TO DECODE")
                 }
             }
-            }.resume()
+        }.resume()
 
     }
 }
