@@ -8,7 +8,13 @@
 
 import Foundation
 
-struct LocationItem: Hashable, Codable {
+protocol WeatherLocationInformative {
+    var latitude: Double? { get }
+    var longitude: Double? { get }
+    var name: String? { get }
+}
+
+struct LocationItem: Hashable, Codable, WeatherLocationInformative {
     var latitude: Double?
     var longitude: Double?
     var name: String?

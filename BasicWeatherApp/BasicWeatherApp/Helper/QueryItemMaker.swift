@@ -10,7 +10,7 @@ import Foundation
 
 struct QueryItemMaker {
 
-    static func weatherAPIquery(city: LocationItem?) -> [String:String] {
+    static func weatherAPIquery(city: WeatherLocationInformative?) -> [String:String] {
         guard let lat = city?.latitude else { return [:] }
         guard let lng = city?.longitude else { return [:] }
         guard let appId = KeyInfoLoader.loadValue(of: .APIKey) else { return [:] }
