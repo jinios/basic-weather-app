@@ -35,6 +35,11 @@ enum Time {
 
 extension Date {
 
+    func isPastFromNow(compareTime: Time) -> Bool {
+        let result = Date().timeIntervalSinceNow - self.convertKST().timeIntervalSinceNow
+        return result > compareTime.timeIntervalValue
+    }
+
     func convertToString(format: String) -> String {
         let formatter = DateFormatter.init()
         formatter.dateFormat = format

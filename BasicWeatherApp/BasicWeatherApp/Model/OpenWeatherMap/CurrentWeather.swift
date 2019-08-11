@@ -23,7 +23,7 @@ struct CurrentWeather: Codable {
     private(set) var snow: Snow?
     private(set) var cityName: String?
     private(set) var cityID: Int?
-    private var timeOfLastupdate: TimeInterval?
+    private(set) var timeOfLastupdate: TimeInterval?
     private(set) var system: System?
     private(set) var visibility: Int?
 
