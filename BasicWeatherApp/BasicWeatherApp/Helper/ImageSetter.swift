@@ -48,7 +48,7 @@ class ImageSetter {
 
         urlSession.downloadTask(with: sessionUrl) {(tempLoation, response, error) in
 
-            if let error = error {
+            if let _ = error {
                 handler(nil)
             }
 

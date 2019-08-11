@@ -8,6 +8,6 @@
 
 import UIKit
 
-protocol ErrorAlertPresentable: UIViewController {
-    func sendErrorAlert()
+protocol ErrorAlertPresentable: class {
+    func sendErrorAlert(error: APIErrorMessage)
 }

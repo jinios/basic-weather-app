@@ -154,12 +154,13 @@ extension String {
 }
 
 extension UIAlertController {
-    class func make(message: String = "죄송합니다😰 문제가 발생했습니다. \n잠시 후 다시 확인해주세요.") -> UIAlertController {
+
+    class func make(message: String = "죄송합니다😰 문제가 발생했습니다. \n잠시 후 다시 확인해주세요.", action: UIAlertAction) -> UIAlertController {
         let alert = UIAlertController(title: nil,
                                       message: message.description,
                                       preferredStyle: .alert)
+        alert.addAction(action)
         return alert
     }
 
 }
-

@@ -104,7 +104,7 @@
                         <viewLayoutGuide key="safeArea" id="WqA-4b-kWD"/>
                     </view>
                     <navigationItem key="navigationItem" id="ell-yF-wqT">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="search" id="hdI-9P-oNN">
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="hdI-9P-oNN">
                             <connections>
                                 <action selector="openSearchCity:" destination="DyS-vH-pP2" id="ia6-UF-QsC"/>
                             </connections>
