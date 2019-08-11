@@ -130,16 +130,19 @@ extension CitySearchViewController: UITableViewDelegate {
                               parameters: QueryItemMaker.weatherAPIquery(city: locationItem),
                               pathComponent: RequestType.currentWeather)
 
-            DataSetter.fetch(of: locationItem, url: url) { [weak self] (favoriteCity, error) in
-                if let error = error {
-                    SlackWebhook.fire(message: error.body())
-                    self?.sendErrorAlert()
+            DataSetter.fetch(url: url!, index: nil, type: CurrentWeather.self) { [weak self] result in
+
+                switch result {
+                case let .success(currentWeather):
+                    let favoriteCity = FavoriteCity(location: locationItem, currentWeather: currentWeather)
+                    self?.addFavoriteCity(favoriteCity)
+                case let .failure(_, apiErrorMessage):
+                    guard let apiErrorMessage = apiErrorMessage else { break }
+                    self?.sendErrorAlert(error: apiErrorMessage)
                 }
-                guard let favoriteCity = favoriteCity else { return }
-                self?.addFavoriteCity(favoriteCity)
             }
+
         }
-        
     }
     
     func addFavoriteCity(_ city: FavoriteCity) {
@@ -148,6 +151,7 @@ extension CitySearchViewController: UITableViewDelegate {
             self.dismiss()
         }
     }
+
 }
 
 extension CitySearchViewController: UIScrollViewDelegate {
@@ -160,13 +164,13 @@ extension CitySearchViewController: UIScrollViewDelegate {
 
 extension CitySearchViewController: ErrorAlertPresentable {
 
-    func sendErrorAlert() {
+    func sendErrorAlert(error: APIErrorMessage) {
         DispatchQueue.main.async {
-            let alert = UIAlertController.make()
-            alert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
+            let action = UIAlertAction(title: "Done", style: .default) { _ in
+                SlackWebhook.fire(message: error.body())
+            }
+            let alert = UIAlertController.make(action: action)
             self.present(alert, animated: true, completion: nil)
         }
     }
 }
-
-

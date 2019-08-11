@@ -58,21 +58,23 @@ class FavoriteListViewController: UIViewController, IconDownloader {
                           parameters: QueryItemMaker.weatherAPIquery(city: selectedCity.location),
                           pathComponent: RequestType.forecastWeather)
 
-        DataSetter.fetch(of: selectedCity, url: url) { [weak self] (forecast, city, error) in
-            if let error = error {
-                SlackWebhook.fire(message: error.body())
-                self?.sendErrorAlert()
-            }
+        DataSetter.fetch(url: url!, index: nil, type: Forecast.self) { [weak self] result in
 
-            guard let forecast = forecast else { return }
-            guard let city = city else { return }
-            self?.pushToDetailWeather(forecast: forecast, city: city)
+            switch result {
+            case let .success(forecast):
+                let detailWeatherInfo = DetailWeatherInfo(city: selectedCity, forecast: forecast)
+                self?.pushToDetailWeather(info: detailWeatherInfo)
+            case let .failure(_, apiErrorMessage):
+                guard let apiErrorMessage = apiErrorMessage else { break }
+                self?.sendErrorAlert(error: apiErrorMessage)
+            }
         }
+
     }
 
-    func pushToDetailWeather(forecast: Forecast, city: FavoriteCity) {
+
+    func pushToDetailWeather(info detailWeather: DetailWeatherInfo) {
         guard let detailWeatherVC = self.storyboard?.instantiateViewController(withIdentifier: "DetailWeatherViewController") as? DetailWeatherViewController else { return }
-        let detailWeather = DetailWeatherInfo(city: city, forecast: forecast)
         detailWeatherVC.detailWeatherInfo = detailWeather
 
         DispatchQueue.main.async {
@@ -91,25 +93,22 @@ class FavoriteListViewController: UIViewController, IconDownloader {
         for index in 0..<favoriteCityManager.count {
             guard let selectedCity = favoriteCityManager.city(at: index) else { return }
 
-            if favoriteCityManager.isNeedToUpdate(at: index) {
+            guard favoriteCityManager.isNeedToUpdate(at: index) else { continue }
+            
+            let url = API.url(baseURL: KeyInfoLoader.loadValue(of: .WeatherBaseURL),
+                              parameters: QueryItemMaker.weatherAPIquery(city: selectedCity.location),
+                              pathComponent: RequestType.currentWeather)
 
-                let url = API.url(baseURL: KeyInfoLoader.loadValue(of: .WeatherBaseURL),
-                                  parameters: QueryItemMaker.weatherAPIquery(city: selectedCity.location),
-                                  pathComponent: RequestType.currentWeather)
+            DataSetter.fetch(url: url!, index: index, type: CurrentWeather.self) { [weak self] result in
 
-                DataSetter.fetch(url: url!, index: index, type: CurrentWeather.self) { [weak self] result in
-
-                    switch result {
-                    case let .success(currentWeather):
-                        let favoriteCity = FavoriteCity(location: selectedCity.location!, currentWeather: currentWeather)
-                        self?.favoriteCityManager?.replace(city: favoriteCity, at: index)
-                    case let .failure(_, apiErrorMessage):
-                        guard let apiErrorMessage = apiErrorMessage else { break }
-                        self?.sendErrorAlert(error: apiErrorMessage)
-                    }
+                switch result {
+                case let .success(currentWeather):
+                    let favoriteCity = FavoriteCity(location: selectedCity.location!, currentWeather: currentWeather)
+                    self?.favoriteCityManager?.replace(city: favoriteCity, at: index)
+                case let .failure(_, apiErrorMessage):
+                    guard let apiErrorMessage = apiErrorMessage else { break }
+                    self?.sendErrorAlert(error: apiErrorMessage)
                 }
-            } else {
-                continue
             }
         }
     }
@@ -125,15 +124,16 @@ extension FavoriteListViewController: LocationTrackingDelegate {
                           parameters: QueryItemMaker.weatherAPIquery(city: locationItem),
                           pathComponent: RequestType.currentWeather)
 
-        DataSetter.fetch(of: locationItem, url: url) { [weak self] (favoriteCity, error) in
+        DataSetter.fetch(url: url!, index: nil, type: CurrentWeather.self) { [weak self] result in
 
-            if let error = error {
-                SlackWebhook.fire(message: error.body())
-                self?.sendErrorAlert()
+            switch result {
+            case let .success(currentWeather):
+                let favoriteCity = FavoriteCity(location: locationItem, currentWeather: currentWeather)
+                self?.favoriteCityManager?.update(userLocationCity: favoriteCity)
+            case let .failure(_, apiErrorMessage):
+                guard let apiErrorMessage = apiErrorMessage else { break }
+                self?.sendErrorAlert(error: apiErrorMessage)
             }
-
-            guard let favoriteCity = favoriteCity else { return }
-            self?.favoriteCityManager?.update(userLocationCity: favoriteCity)
         }
 
     }
@@ -191,25 +191,25 @@ extension FavoriteListViewController: FavoriteListPresentable {
         }
     }
 
-
     func updateRow(index: Int) {
         DispatchQueue.main.async {
             let indexPath = IndexPath(row: index, section: 0)
-            self.tableView.reloadRows(at: [indexPath], with: .right)
+            self.tableView.reloadRows(at: [indexPath], with: .top)
         }
     }
-
-
 }
 
 extension FavoriteListViewController: ErrorAlertPresentable {
 
-    func sendErrorAlert() {
+    func sendErrorAlert(error: APIErrorMessage) {
         DispatchQueue.main.async {
-            let alert = UIAlertController.make()
-            alert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
+            let action = UIAlertAction(title: "Done", style: .default) { _ in
+                SlackWebhook.fire(message: error.body())
+            }
+            let alert = UIAlertController.make(action: action)
             self.present(alert, animated: true, completion: nil)
         }
     }
 
 }
+
