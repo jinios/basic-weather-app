@@ -35,7 +35,7 @@ final class FavoriteList {
     static func isSameData(_ data: FavoriteList) -> Bool {
         return sharedInstance.cities == data.cities
     }
-    
+
     fileprivate func add(_ city: FavoriteCity) -> Bool {
         guard !cities.contains(city) else { return false }
         self.cities.append(city)
@@ -60,6 +60,10 @@ final class FavoriteList {
 
     fileprivate func count() -> Int {
         return self.cities.count
+    }
+
+    fileprivate func replace(city: FavoriteCity, at index: Int) {
+        self.cities[index] = city
     }
 
 }
@@ -88,7 +92,7 @@ extension FavoriteList: Codable {
 class FavoriteCityManager {
 
     var userLocationCity: FavoriteCity?
-    var presentableDelegate: FavoriteListPresentable?
+    weak var presentableDelegate: FavoriteListPresentable?
 
     var hasUserLocationCity: Bool {
         guard let userLocationCity = self.userLocationCity else { return false }
@@ -114,7 +118,6 @@ class FavoriteCityManager {
             presentableDelegate?.updateList()
             return true
         }
-
     }
 
     func city(at index: Int) -> FavoriteCity? {
@@ -138,6 +141,25 @@ class FavoriteCityManager {
     func add(_ city: FavoriteCity) {
         guard FavoriteList.shared.add(city) else { return }
         presentableDelegate?.updateList()
+    }
+
+    func replace(city: FavoriteCity, at index: Int) {
+        if self.userLocationCity != nil {
+            if index == 0 {
+                self.userLocationCity = city
+            } else {
+                FavoriteList.shared.replace(city: city, at: index - 1)
+            }
+        } else {
+            FavoriteList.shared.replace(city: city, at: index)
+        }
+        presentableDelegate?.updateRow(index: index)
+    }
+
+    func isNeedToUpdate(at index: Int) -> Bool {
+        guard let timeOfLastUpdate = self.city(at: index)?.currentWeather?.timeOfLastupdate else { return true }
+        let dateOfLastUpdate = Date(timeIntervalSince1970: timeOfLastUpdate)
+        return dateOfLastUpdate.isPastFromNow(compareTime: .minute(10))
     }
 
 }

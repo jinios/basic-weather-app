@@ -15,10 +15,19 @@ class FavoriteListViewController: UIViewController, IconDownloader {
     private var locationTracker: LocationTracker?
     private var favoriteCityManager: FavoriteCityManager?
 
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshAllList), for: UIControl.Event.valueChanged)
+        refreshControl.tintColor = UIColor.blue
+
+        return refreshControl
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 100
         self.navigationItem.title = "즐겨찾는 도시"
+        tableView.addSubview(self.refreshControl)
 
         favoriteCityManager = FavoriteCityManager()
         favoriteCityManager?.presentableDelegate = self
@@ -68,6 +77,40 @@ class FavoriteListViewController: UIViewController, IconDownloader {
 
         DispatchQueue.main.async {
             self.navigationController?.pushViewController(detailWeatherVC, animated: true)
+        }
+    }
+
+    @objc func refreshAllList() {
+        self.updateAllCityWeather()
+        refreshControl.endRefreshing()
+    }
+
+    func updateAllCityWeather() {
+        guard let favoriteCityManager = self.favoriteCityManager else { return }
+
+        for index in 0..<favoriteCityManager.count {
+            guard let selectedCity = favoriteCityManager.city(at: index) else { return }
+
+            if favoriteCityManager.isNeedToUpdate(at: index) {
+
+                let url = API.url(baseURL: KeyInfoLoader.loadValue(of: .WeatherBaseURL),
+                                  parameters: QueryItemMaker.weatherAPIquery(city: selectedCity.location),
+                                  pathComponent: RequestType.currentWeather)
+
+                DataSetter.fetch(url: url!, index: index, type: CurrentWeather.self) { [weak self] result in
+
+                    switch result {
+                    case let .success(currentWeather):
+                        let favoriteCity = FavoriteCity(location: selectedCity.location!, currentWeather: currentWeather)
+                        self?.favoriteCityManager?.replace(city: favoriteCity, at: index)
+                    case let .failure(_, apiErrorMessage):
+                        guard let apiErrorMessage = apiErrorMessage else { break }
+                        self?.sendErrorAlert(error: apiErrorMessage)
+                    }
+                }
+            } else {
+                continue
+            }
         }
     }
 
@@ -147,6 +190,15 @@ extension FavoriteListViewController: FavoriteListPresentable {
             self.tableView.reloadData()
         }
     }
+
+
+    func updateRow(index: Int) {
+        DispatchQueue.main.async {
+            let indexPath = IndexPath(row: index, section: 0)
+            self.tableView.reloadRows(at: [indexPath], with: .right)
+        }
+    }
+
 
 }
 

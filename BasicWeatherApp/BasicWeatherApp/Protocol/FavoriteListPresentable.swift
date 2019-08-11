@@ -10,4 +10,5 @@ import Foundation
 
 protocol FavoriteListPresentable: class {
     func updateList()
+    func updateRow(index: Int)
 }
