@@ -38,6 +38,13 @@ final class DataSetter {
                                                        error: nil)
                     handler(.failure(error, errorMessage))
                 }
+            } else {
+
+                let errorMessage = APIErrorMessage(brokenUrl: url,
+                                                   data: data,
+                                                   type: .Data,
+                                                   error: nil)
+                handler(.failure(nil, errorMessage))
             }
         }.resume()
     }
