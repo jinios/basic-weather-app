@@ -111,14 +111,20 @@ class FavoriteCityManager {
 
     @discardableResult
     func update(userLocationCity: FavoriteCity) -> Bool {
+        var result = false
+
         if let previousCity = self.userLocationCity, previousCity == userLocationCity {
-            presentableDelegate?.updateList()
-            return false
+            result = false
         } else {
             self.userLocationCity = userLocationCity // 이전 위치와 다르면 새로운 위치 넣어줌
-            presentableDelegate?.updateList()
-            return true
+            result = true
         }
+
+        DispatchQueue.main.async {
+            self.presentableDelegate?.updateList()
+        }
+
+        return result
     }
 
     func city(at index: Int) -> FavoriteCity? {
@@ -136,12 +142,17 @@ class FavoriteCityManager {
     func remove(at index: Int) {
         let removeIndex = userLocationCity != nil ? index - 1 : index
         FavoriteList.shared.remove(at: removeIndex)
-        presentableDelegate?.updateList()
+
+        DispatchQueue.main.async {
+            self.presentableDelegate?.updateList()
+        }
     }
 
     func add(_ city: FavoriteCity) {
         guard FavoriteList.shared.add(city) else { return }
-        presentableDelegate?.updateList()
+        DispatchQueue.main.async {
+            self.presentableDelegate?.updateList()
+        }
     }
 
     func replace(city: FavoriteCity, at index: Int) {
@@ -154,7 +165,9 @@ class FavoriteCityManager {
         } else {
             FavoriteList.shared.replace(city: city, at: index)
         }
-        presentableDelegate?.updateRow(index: index)
+        DispatchQueue.main.async {
+            self.presentableDelegate?.updateRow(index: index)
+        }
     }
 
     func isNeedToUpdate(at index: Int) -> Bool {

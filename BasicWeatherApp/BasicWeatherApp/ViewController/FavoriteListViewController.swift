@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FavoriteListViewController: UIViewController, IconDownloader {
+class FavoriteListViewController: UIViewController, IconDownloader, ErrorAlertPresentable {
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -65,9 +65,12 @@ class FavoriteListViewController: UIViewController, IconDownloader {
             case let .success(forecast):
                 let detailWeatherInfo = DetailWeatherInfo(city: selectedCity, forecast: forecast)
                 self?.pushToDetailWeather(info: detailWeatherInfo)
+
             case let .failure(_, apiErrorMessage):
-                guard let apiErrorMessage = apiErrorMessage else { break }
-                self?.sendErrorAlert(error: apiErrorMessage)
+                DispatchQueue.main.async {
+                    guard let apiErrorMessage = apiErrorMessage else { return }
+                    self?.sendErrorAlert(error: apiErrorMessage)
+                }
             }
         }
 
@@ -107,8 +110,10 @@ class FavoriteListViewController: UIViewController, IconDownloader {
                     let favoriteCity = FavoriteCity(location: selectedCity.location!, currentWeather: currentWeather)
                     self?.favoriteCityManager?.replace(city: favoriteCity, at: index)
                 case let .failure(_, apiErrorMessage):
-                    guard let apiErrorMessage = apiErrorMessage else { break }
-                    self?.sendErrorAlert(error: apiErrorMessage)
+                    DispatchQueue.main.async {
+                        guard let apiErrorMessage = apiErrorMessage else { return }
+                        self?.sendErrorAlert(error: apiErrorMessage)
+                    }
                 }
             }
         }
@@ -131,9 +136,12 @@ extension FavoriteListViewController: LocationTrackingDelegate {
             case let .success(currentWeather):
                 let favoriteCity = FavoriteCity(location: locationItem, currentWeather: currentWeather)
                 self?.favoriteCityManager?.update(userLocationCity: favoriteCity)
+
             case let .failure(_, apiErrorMessage):
-                guard let apiErrorMessage = apiErrorMessage else { break }
-                self?.sendErrorAlert(error: apiErrorMessage)
+                DispatchQueue.main.async {
+                    guard let apiErrorMessage = apiErrorMessage else { return }
+                    self?.sendErrorAlert(error: apiErrorMessage)
+                }
             }
         }
 
@@ -188,30 +196,11 @@ extension FavoriteListViewController: FavoriteCityDelegate {
 extension FavoriteListViewController: FavoriteListPresentable {
 
     func updateList() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        self.tableView.reloadData()
     }
 
     func updateRow(index: Int) {
-        DispatchQueue.main.async {
-            let indexPath = IndexPath(row: index, section: 0)
-            self.tableView.reloadRows(at: [indexPath], with: .top)
-        }
+        let indexPath = IndexPath(row: index, section: 0)
+        self.tableView.reloadRows(at: [indexPath], with: .top)
     }
 }
-
-extension FavoriteListViewController: ErrorAlertPresentable {
-
-    func sendErrorAlert(error: APIErrorMessage) {
-        DispatchQueue.main.async {
-            let action = UIAlertAction(title: "Done", style: .default) { _ in
-                SlackWebhook.fire(message: error.body())
-            }
-            let alert = UIAlertController.make(action: action)
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
-
-}
-

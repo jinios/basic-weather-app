@@ -8,6 +8,18 @@
 
 import UIKit
 
-protocol ErrorAlertPresentable: class {
+protocol ErrorAlertPresentable: UIViewController {
     func sendErrorAlert(error: APIErrorMessage)
+}
+
+extension ErrorAlertPresentable {
+
+    func sendErrorAlert(error: APIErrorMessage) {
+        let action = UIAlertAction(title: "Done", style: .default) { _ in
+            SlackWebhook.fire(message: error.body())
+        }
+        let alert = UIAlertController.make(action: action)
+        self.present(alert, animated: true, completion: nil)
+    }
+
 }

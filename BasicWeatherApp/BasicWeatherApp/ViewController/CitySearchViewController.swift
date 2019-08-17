@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class CitySearchViewController: UIViewController {
+class CitySearchViewController: UIViewController, ErrorAlertPresentable {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -136,9 +136,12 @@ extension CitySearchViewController: UITableViewDelegate {
                 case let .success(currentWeather):
                     let favoriteCity = FavoriteCity(location: locationItem, currentWeather: currentWeather)
                     self?.addFavoriteCity(favoriteCity)
+                    
                 case let .failure(_, apiErrorMessage):
-                    guard let apiErrorMessage = apiErrorMessage else { break }
-                    self?.sendErrorAlert(error: apiErrorMessage)
+                    DispatchQueue.main.async {
+                        guard let apiErrorMessage = apiErrorMessage else { return }
+                        self?.sendErrorAlert(error: apiErrorMessage)
+                    }
                 }
             }
 
@@ -161,16 +164,3 @@ extension CitySearchViewController: UIScrollViewDelegate {
     }
 }
 
-
-extension CitySearchViewController: ErrorAlertPresentable {
-
-    func sendErrorAlert(error: APIErrorMessage) {
-        DispatchQueue.main.async {
-            let action = UIAlertAction(title: "Done", style: .default) { _ in
-                SlackWebhook.fire(message: error.body())
-            }
-            let alert = UIAlertController.make(action: action)
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
-}
