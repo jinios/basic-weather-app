@@ -109,6 +109,7 @@ class FavoriteCityManager {
         }
     }
 
+    @discardableResult
     func update(userLocationCity: FavoriteCity) -> Bool {
         if let previousCity = self.userLocationCity, previousCity == userLocationCity {
             presentableDelegate?.updateList()

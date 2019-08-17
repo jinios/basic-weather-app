@@ -39,6 +39,7 @@ class FavoriteListViewController: UIViewController, IconDownloader {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.view.isUserInteractionEnabled = true
         if let indexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: indexPath, animated: true)
         }
@@ -153,6 +154,7 @@ extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.view.isUserInteractionEnabled = false
         self.fetchForecast(at: indexPath.row)
     }
 
